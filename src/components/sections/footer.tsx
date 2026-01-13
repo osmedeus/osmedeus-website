@@ -46,7 +46,7 @@ const socialLinks = [
 
 export function Footer() {
   const { resolvedTheme, setTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
+  const isDark = (resolvedTheme ?? "dark") === "dark";
 
   return (
     <footer className="relative border-t border-[var(--border)] bg-[var(--background)]">
