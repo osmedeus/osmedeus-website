@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -53,6 +54,31 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
+        <Script id="suppress-abort-errors" strategy="beforeInteractive">
+          {`(()=>{
+const shouldSuppress=(v)=>{
+  const s=String(v??"");
+  return s.includes("net::ERR_ABORTED")||s.includes("AbortError")||s.includes("aborted")||s.includes("ERR_ABORTED");
+};
+const patch=(k)=>{
+  const orig=console[k];
+  if(typeof orig!=="function") return;
+  console[k]=(...args)=>{
+    if(args.some(shouldSuppress)) return;
+    orig(...args);
+  };
+};
+patch("error");
+patch("warn");
+patch("log");
+window.addEventListener("unhandledrejection",(e)=>{
+  if(shouldSuppress(e.reason)) e.preventDefault();
+});
+window.addEventListener("error",(e)=>{
+  if(shouldSuppress(e.message)) e.preventDefault();
+},true);
+})();`}
+        </Script>
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="dark"

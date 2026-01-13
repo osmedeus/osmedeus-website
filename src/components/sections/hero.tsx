@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type KeyboardEvent } from "react";
+import { useMemo, useState, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "next-themes";
@@ -10,8 +10,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 import { FadeIn } from "@/components/ui/text-generate-effect";
 import { GradientBackground } from "@/components/ui/aurora-background";
 
-const installCommand =
-  "curl -sSL https://www.osmedeus.org/install.sh | bash";
+const defaultInstallBaseUrl = "https://osmedeus-website.vercel.app";
 
 const trustedCompanies = [
   {
@@ -112,6 +111,12 @@ export function Hero() {
   const [copied, setCopied] = useState(false);
   const { resolvedTheme } = useTheme();
 
+  const installCommand = useMemo(() => {
+    const origin =
+      typeof window === "undefined" ? defaultInstallBaseUrl : window.location.origin;
+    return `curl -sSL ${origin}/install.sh | bash`;
+  }, []);
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(installCommand);
     setCopied(true);
@@ -197,7 +202,10 @@ export function Hero() {
                     onKeyDown={handleCopyKeyDown}
                     aria-label="Copy install command"
                   >
-                    <code className="min-w-0 flex-1 break-words font-mono text-xs leading-relaxed text-[color:var(--color-terminal-text)] sm:text-sm">
+                    <code
+                      className="min-w-0 flex-1 break-words font-mono text-xs leading-relaxed text-[color:var(--color-terminal-text)] sm:text-sm"
+                      suppressHydrationWarning
+                    >
                       <span style={{ color: "var(--color-terminal-muted)" }}>
                         $&nbsp;
                       </span>

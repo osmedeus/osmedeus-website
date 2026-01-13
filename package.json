@@ -6,8 +6,7 @@
     "dev": "bunx --bun next dev",
     "dev:clean": "rm -rf .next .next-static && bunx --bun next dev",
     "build": "bunx --bun next build",
-    "build:dist": "NEXT_STATIC_EXPORT=true bunx --bun next build && bun scripts/prepare-dist.mjs",
-    "serve:dist": "bun scripts/serve-dist.mjs",
+    "build:dist": "rm -rf dist .next-static && NEXT_STATIC_EXPORT=true bunx --bun next build && mv .next-static dist",
     "start": "bunx --bun next start",
     "lint": "bunx --bun eslint . --max-warnings=0"
   },
