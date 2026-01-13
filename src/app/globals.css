@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+/* Custom theme configuration */
+@theme {
+  /* Dark theme colors */
+  --color-background: #0b0b0f;
+  --color-surface: #111118;
+  --color-surface-2: #151522;
+  --color-border: rgba(255, 255, 255, 0.10);
+  --color-text: #f5f5f7;
+  --color-muted: rgba(245, 245, 247, 0.70);
+  --color-accent: rgba(255, 255, 255, 0.92);
+
+  /* Light theme colors */
+  --color-background-light: #fafafa;
+  --color-surface-light: #ffffff;
+  --color-surface-2-light: #f5f5f5;
+  --color-border-light: rgba(0, 0, 0, 0.08);
+  --color-text-light: #0b0b0f;
+  --color-muted-light: rgba(11, 11, 15, 0.65);
+  --color-accent-light: rgba(0, 0, 0, 0.90);
+
+  /* Terminal (Dracula) palette */
+  --color-terminal-bg: #282a36;
+  --color-terminal-surface: #343746;
+  --color-terminal-border: #44475a;
+  --color-terminal-text: #f8f8f2;
+  --color-terminal-muted: #6272a4;
+  --color-terminal-green: #50fa7b;
+  --color-terminal-purple: #bd93f9;
+  --color-terminal-cyan: #8be9fd;
+  --color-terminal-yellow: #f1fa8c;
+  --color-terminal-pink: #ff79c6;
+  --color-terminal-orange: #ffb86c;
+
+  /* Glow effects */
+  --shadow-glow: 0 0 24px rgba(255, 255, 255, 0.10);
+  --shadow-glow-strong: 0 0 40px rgba(255, 255, 255, 0.15);
+
+  /* Animation durations */
+  --duration-fast: 0.2s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+
+  /* Font family */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* CSS variables for theme switching */
+:root {
+  --background: var(--color-background);
+  --surface: var(--color-surface);
+  --surface-2: var(--color-surface-2);
+  --border: var(--color-border);
+  --foreground: var(--color-text);
+  --muted: var(--color-muted);
+  --accent: var(--color-accent);
+  --brand-primary-rgb: 99 102 241;
+
+  /* Shadcn compatible variables */
+  --radius: 0.5rem;
+  --primary: var(--color-text);
+  --primary-foreground: var(--color-background);
+  --secondary: var(--color-surface-2);
+  --secondary-foreground: var(--color-text);
+  --muted-foreground: var(--color-muted);
+  --destructive: #ef4444;
+  --destructive-foreground: #fafafa;
+  --ring: var(--color-accent);
+  --card: var(--color-surface);
+  --card-foreground: var(--color-text);
+  --popover: var(--color-surface);
+  --popover-foreground: var(--color-text);
+  --input: var(--color-border);
+}
+
+[data-theme="light"],
+.light {
+  --background: var(--color-background-light);
+  --surface: var(--color-surface-light);
+  --surface-2: var(--color-surface-2-light);
+  --border: var(--color-border-light);
+  --foreground: var(--color-text-light);
+  --muted: var(--color-muted-light);
+  --accent: var(--color-accent-light);
+  --brand-primary-rgb: 79 70 229;
+
+  --color-terminal-bg: #f2f4ff;
+  --color-terminal-surface: #e7eaff;
+  --color-terminal-border: rgba(11, 11, 15, 0.12);
+  --color-terminal-text: #0b0b0f;
+  --color-terminal-muted: rgba(11, 11, 15, 0.60);
+  --color-terminal-green: #047857;
+  --color-terminal-purple: #6d28d9;
+  --color-terminal-cyan: #0369a1;
+  --color-terminal-yellow: #a16207;
+  --color-terminal-pink: #be185d;
+  --color-terminal-orange: #c2410c;
+
+  --primary: var(--color-text-light);
+  --primary-foreground: var(--color-background-light);
+  --secondary: var(--color-surface-2-light);
+  --secondary-foreground: var(--color-text-light);
+  --muted-foreground: var(--color-muted-light);
+  --card: var(--color-surface-light);
+  --card-foreground: var(--color-text-light);
+  --popover: var(--color-surface-light);
+  --popover-foreground: var(--color-text-light);
+  --input: var(--color-border-light);
+}
+
+/* Base styles */
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--accent);
+  color: var(--background);
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Aurora animation */
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+.animate-aurora {
+  animation: aurora 60s linear infinite;
+}
+
+/* Spotlight animation */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+.osmedeus-logo-glow {
+  filter: drop-shadow(
+    0 0 10px rgb(var(--brand-primary-rgb) / 0.35)
+  );
+  transition: filter 200ms;
+}
+
+.osmedeus-logo-glow:hover {
+  filter: drop-shadow(
+    0 0 14px rgb(var(--brand-primary-rgb) / 0.55)
+  );
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 70s linear infinite;
+  will-change: transform;
+}
