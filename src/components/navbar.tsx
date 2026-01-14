@@ -75,9 +75,13 @@ export function Navbar() {
             rel="noopener noreferrer"
             className="hidden sm:block"
           >
-            <Button variant="borderMagic" size="sm">
+            <Button
+              variant="borderMagic"
+              size="sm"
+              className="[&>span:first-child]:bg-[conic-gradient(from_90deg_at_50%_50%,#bbf7d0_0%,#16a34a_50%,#bbf7d0_100%)] [&>span:last-child]:bg-green-600 hover:[&>span:last-child]:bg-green-700"
+            >
               <HeartIcon className="mr-2 h-4 w-4" />
-              Sponsor
+              Sponsoring
             </Button>
           </a>
 
@@ -133,7 +137,12 @@ export function Navbar() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Button variant="borderMagic" size="sm" onClick={() => setMobileMenuOpen(false)}>
+                <Button
+                  variant="borderMagic"
+                  size="sm"
+                  className="[&>span:first-child]:bg-[conic-gradient(from_90deg_at_50%_50%,#bbf7d0_0%,#16a34a_50%,#bbf7d0_100%)] [&>span:last-child]:bg-green-600 hover:[&>span:last-child]:bg-green-700"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
                   <HeartIcon className="mr-2 h-4 w-4" />
                   Sponsoring
                 </Button>

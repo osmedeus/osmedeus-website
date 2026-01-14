@@ -86,7 +86,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span
             className={cn(
               "inline-flex h-full w-full items-center justify-center gap-2 rounded-full",
-              "bg-slate-950 text-white",
+              "bg-[rgb(var(--brand-primary-rgb))] text-white",
               "text-sm font-medium",
               "backdrop-blur-3xl",
               innerPaddingClassName

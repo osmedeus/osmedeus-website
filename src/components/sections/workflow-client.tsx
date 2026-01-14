@@ -73,18 +73,13 @@ export function WorkflowClient({
                       </div>
                       <button
                         onClick={() => handleCopy(tab.code, tab.id)}
-                        className="flex items-center gap-2 rounded-md px-3 py-1.5 text-sm text-[color:var(--color-terminal-muted)] transition-all hover:bg-[color:var(--color-terminal-border)] hover:text-[color:var(--color-terminal-text)]"
+                        className="flex items-center justify-center rounded-md p-2 text-[color:var(--color-terminal-muted)] transition-all hover:bg-[color:var(--color-terminal-border)] hover:text-[color:var(--color-terminal-text)]"
+                        aria-label={copied === tab.id ? "Copied" : "Copy"}
                       >
                         {copied === tab.id ? (
-                          <>
-                            <CheckIcon className="h-4 w-4" />
-                            Copied
-                          </>
+                          <CheckIcon className="h-4 w-4" />
                         ) : (
-                          <>
-                            <CopyIcon className="h-4 w-4" />
-                            Copy
-                          </>
+                          <CopyIcon className="h-4 w-4" />
                         )}
                       </button>
                     </div>

@@ -107,15 +107,17 @@ const trustedCompanies = [
   },
 ];
 
-export function Hero() {
+export function Hero({
+  installBaseUrl = defaultInstallBaseUrl,
+}: {
+  installBaseUrl?: string;
+}) {
   const [copied, setCopied] = useState(false);
   const { resolvedTheme } = useTheme();
 
   const installCommand = useMemo(() => {
-    const origin =
-      typeof window === "undefined" ? defaultInstallBaseUrl : window.location.origin;
-    return `curl -sSL ${origin}/install.sh | bash`;
-  }, []);
+    return `curl -sSL ${installBaseUrl}/install.sh | bash`;
+  }, [installBaseUrl]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(installCommand);
@@ -203,7 +205,7 @@ export function Hero() {
                     aria-label="Copy install command"
                   >
                     <code
-                      className="min-w-0 flex-1 break-words font-mono text-xs leading-relaxed text-[color:var(--color-terminal-text)] sm:text-sm"
+                      className="min-w-0 flex-1 break-words text-center font-mono text-xs leading-relaxed text-[color:var(--color-terminal-text)] sm:text-sm"
                       suppressHydrationWarning
                     >
                       <span style={{ color: "var(--color-terminal-muted)" }}>
@@ -214,14 +216,12 @@ export function Hero() {
 
                     <span className="ml-auto shrink-0">
                       {copied ? (
-                        <span className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-text)] sm:text-sm">
+                        <span className="inline-flex items-center rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-text)] sm:text-sm">
                           <CheckIcon className="h-4 w-4" />
-                          Copied
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-muted)] transition-all hover:bg-[color:var(--color-terminal-border)] hover:text-[color:var(--color-terminal-text)] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)] sm:text-sm">
+                        <span className="inline-flex items-center rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-muted)] transition-all hover:bg-[color:var(--color-terminal-border)] hover:text-[color:var(--color-terminal-text)] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)] sm:text-sm">
                           <CopyIcon className="h-4 w-4" />
-                          Copy
                         </span>
                       )}
                     </span>

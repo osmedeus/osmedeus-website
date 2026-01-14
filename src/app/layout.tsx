@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://osmedeus.org"),
   title: "Osmedeus - Security Orchestration Engine",
-  description:
-    "Modern orchestration engine for security automation with declarative YAML workflows. Automate reconnaissance, vulnerability scanning, and more.",
+  description: "Osmedeus - Modern Orchestration Engine for Security",
   icons: {
     icon: "/favicon.ico",
   },
@@ -27,18 +27,25 @@ export const metadata: Metadata = {
   authors: [{ name: "Osmedeus Team" }],
   openGraph: {
     title: "Osmedeus - Security Orchestration Engine",
-    description:
-      "Security automation made simple. Declarative YAML workflows for pentesting and security automation.",
+    description: "Osmedeus - Modern Orchestration Engine for Security",
     url: "https://osmedeus.org",
     siteName: "Osmedeus",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "/osmedeus-logo.png",
+        width: 512,
+        height: 512,
+        alt: "Osmedeus",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Osmedeus - Security Orchestration Engine",
-    description:
-      "Security automation made simple. Declarative YAML workflows for pentesting and security automation.",
+    description: "Osmedeus - Modern Orchestration Engine for Security",
+    images: ["/osmedeus-logo.png"],
   },
   robots: {
     index: true,
