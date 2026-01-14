@@ -407,7 +407,7 @@ main() {
 	success "Osmedeus CLI installed successfully!"
 	log "Run ${LIGHT_GREEN}osmedeus health${NC} (after restarting your shell) to validate your setup and generate a sample config"
 	log "Visit ${LIGHT_GREEN}https://docs.osmedeus.org${NC} for documentation"
-	log "Run ${LIGHT_GREEN}osmedeus install validate --preset${NC} to download the ready-to-use workflow and then start scanning"
+	log "Run ${LIGHT_GREEN}osmedeus install base --preset${NC} to download the ready-to-use workflow and then start scanning"
 }
 
 main "$@"
