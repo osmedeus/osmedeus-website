@@ -161,7 +161,13 @@ export function Hero({
               <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
             </span>
             <span className="text-sm text-[var(--muted)]">
-              v5.0 Released – Cleaner, More Flexible Architecture and Next Level Power
+              <span className="block sm:hidden">
+                v5.0 - with Next-Level Performance &amp; Power
+              </span>
+              <span className="hidden sm:inline">
+                v5.0 Released – Cleaner, More Flexible Architecture and Next Level
+                Power
+              </span>
             </span>
           </div>
         </FadeIn>
@@ -186,7 +192,7 @@ export function Hero({
               From reconnaissance to vulnerability scanning, all in one place.
             </p>
 
-            <div className="mt-6 w-full max-w-3xl px-2 lg:max-w-4xl">
+			<div className="mt-6 hidden w-full max-w-3xl px-2 sm:block lg:max-w-4xl">
               <MovingBorder
                 as="div"
                 rx="16px"
@@ -240,7 +246,11 @@ export function Hero({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="movingBorder" size="lg" className="min-w-[160px]">
+              <Button
+                variant="movingBorder"
+                size="lg"
+                className="w-[200px] justify-center"
+              >
                 <GithubIcon className="mr-2 h-4 w-4" />
                 GitHub
               </Button>
@@ -250,7 +260,11 @@ export function Hero({
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Button variant="outline" size="lg" className="min-w-[160px]">
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-[200px] justify-center border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white"
+              >
                 <BookOpenIcon className="mr-2 h-4 w-4" />
                 Documentation
               </Button>
@@ -261,9 +275,13 @@ export function Hero({
         {/* Trusted By */}
         <FadeIn delay={0.4} duration={0.5}>
           <div className="mt-[55px] flex flex-col items-center gap-6">
-            <p className="text-sm tracking-wider text-[var(--muted)]">
-              Proven to identify real security vulnerabilities for Fortune 500
-              companies and many more
+            <p className="max-w-[38ch] px-4 text-center text-sm leading-snug tracking-normal text-[var(--muted)] sm:max-w-none sm:px-0 sm:tracking-wider">
+              <span>Proven to identify real security vulnerabilities for Fortune 500</span>
+              <br className="block sm:hidden" />
+              <span>
+                <span className="hidden sm:inline"> </span>
+                companies and many more
+              </span>
             </p>
             <div className="group relative w-full max-w-6xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
               <div className="flex w-max items-center gap-x-12 py-2 pr-12 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">

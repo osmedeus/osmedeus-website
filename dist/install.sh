@@ -225,11 +225,13 @@ check_existing_installation() {
 
 	if [[ -n "$existing_binary" ]]; then
 		local old_version=""
+		local old_build=""
 		# Try to get the current version
 		old_version=$("$existing_binary" version 2>/dev/null | grep 'Version:' || echo "")
+		old_build=$("$existing_binary" version 2>/dev/null | grep 'Build:' || echo "")
 
-		if [[ -n "$old_version" ]]; then
-			warn "Detected existing osmedeus installation at $existing_binary (${old_version})"
+		if [[ -n "$old_version" && -n "$old_build" ]]; then
+			warn "Detected existing osmedeus installation at $existing_binary (${old_version} - ${old_build})"
 		else
 			warn "Detected existing osmedeus installation at $existing_binary"
 		fi

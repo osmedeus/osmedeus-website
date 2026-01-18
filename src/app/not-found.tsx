@@ -15,7 +15,12 @@ export default function NotFound() {
         <Button asChild variant="movingBorder" size="lg">
           <Link href="/">Back to home</Link>
         </Button>
-        <Button asChild variant="outline" size="lg">
+        <Button
+          asChild
+          variant="outline"
+          size="lg"
+          className="border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white"
+        >
           <a
             href="https://docs.osmedeus.org"
             target="_blank"

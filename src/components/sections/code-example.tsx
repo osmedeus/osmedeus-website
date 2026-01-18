@@ -219,7 +219,9 @@ function BentoGridItem({
         className
       )}
     >
-      <div className="flex flex-1 items-center justify-center p-3">{header}</div>
+      <div className="flex h-56 items-center justify-center p-3 md:h-auto md:flex-1">
+        {header}
+      </div>
       {(title || description || icon) && (
         <div className="flex items-center gap-3 border-t border-[color:var(--color-terminal-border)] px-4 py-3">
           {icon}
