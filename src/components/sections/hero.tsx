@@ -116,7 +116,7 @@ export function Hero({
   const { resolvedTheme } = useTheme();
 
   const installCommand = useMemo(() => {
-    return `curl -sSL ${installBaseUrl}/install.sh | bash`;
+    return `curl -fsSL ${installBaseUrl}/install.sh | bash`;
   }, [installBaseUrl]);
 
   const handleCopy = async () => {
