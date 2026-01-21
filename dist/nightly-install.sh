@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Osmedeus CLI Installation Script
-# Downloads pre-compiled Osmedeus CLI binary from GitHub releases
+# Osmedeus CLI Nightly Installation Script
+# Downloads pre-compiled Osmedeus CLI binary from GitHub nightly releases
 
 # Configuration
 OSM_HOME="${OSM_HOME:-$HOME/.osmedeus}"
 BIN_DIR="$HOME/.local/bin"
 GITHUB_REPO="j3ssie/osmedeus"
 GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
-FALLBACK_VERSION="v5.0.0-beta"
+NIGHTLY_VERSION="v0.0.0-nightly"
 OSM_URL_ENV_SET=0
 if [[ -n "${OSM_URL+x}" ]]; then
 	OSM_URL_ENV_SET=1
@@ -179,33 +179,6 @@ verify_checksum() {
 	success "Checksum verified"
 }
 
-# Fetch latest CLI version from GitHub API with fallback
-fetch_latest_version() {
-    local api_url="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
-    local version
-    local tmp_file
-
-    log "Fetching latest version from GitHub..."
-    tmp_file=$(mktemp)
-
-    # Try to fetch from GitHub API
-    if downloader "$api_url" "$tmp_file" 2>/dev/null; then
-        version=$(grep '"tag_name":' "$tmp_file" | head -n 1 | sed -E 's/.*"([^"]+)".*/\1/')
-        rm -f "$tmp_file"
-
-        if [[ -n "$version" ]]; then
-            echo "$version"
-            return
-        fi
-    fi
-
-    rm -f "$tmp_file" 2>/dev/null
-
-    # Fall back to hardcoded version
-    warn "Failed to fetch from GitHub API, using fallback: $FALLBACK_VERSION"
-    echo "$FALLBACK_VERSION"
-}
-
 fetch_latest_version_from_metadata() {
 	local metadata_url="${OSM_URL%/}/metadata.json"
 	local version
@@ -261,21 +234,11 @@ install_osmedeus_binary() {
 	# Check for existing installation before proceeding
 	check_existing_installation
 
-	local version
-	version="${OSM_VERSION:-}"
-	if [[ -z "$version" ]]; then
-		if [[ $OSM_URL_ENV_SET -eq 1 && -n "${OSM_URL}" ]]; then
-			version=$(fetch_latest_version_from_metadata)
-		else
-			version=$(fetch_latest_version)
-		fi
-	fi
-	if [[ "$version" != v* ]]; then
-		version="v${version}"
-	fi
-	log "Installing version: ${LIGHT_GREEN}${version}${NC}"
+	# Always use the nightly version
+	local version="$NIGHTLY_VERSION"
+	log "Installing nightly version: ${LIGHT_GREEN}${version}${NC}"
 
-	# Strip 'v' prefix for tarball filename (e.g., v5.0.0 -> 5.0.0)
+	# Strip 'v' prefix for tarball filename (e.g., v0.0.0-nightly -> 0.0.0-nightly)
 	local version_no_v="${version#v}"
 	local tarball_name="osmedeus_${version_no_v}_${platform}.tar.gz"
 	local base_url
@@ -405,7 +368,7 @@ update_shell_profile() {
 
 # Main installation
 main() {
-	log "Starting Osmedeus CLI installation..."
+	log "Starting Osmedeus CLI nightly installation..."
 
 	# Check prerequisites
 	check_prereqs
@@ -422,7 +385,7 @@ main() {
 	update_shell_profile
 
 	echo ""
-	success "Osmedeus CLI installed successfully!"
+	success "Osmedeus CLI (nightly) installed successfully!"
 	log "Run ${LIGHT_GREEN}osmedeus health${NC} (after restarting your shell) to validate your setup and generate a sample config"
 	log "Visit ${LIGHT_GREEN}https://docs.osmedeus.org${NC} for documentation"
 	log "Run ${LIGHT_GREEN}osmedeus install base --preset${NC} to download the ready-to-use workflow and then start scanning"
