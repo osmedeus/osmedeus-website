@@ -12,7 +12,7 @@ GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
 FALLBACK_VERSION="v5.0.0-beta"
 
 # Retry configuration
-MAX_RETRIES=5
+MAX_RETRIES=6
 INITIAL_RETRY_DELAY=2  # seconds
 
 OSM_URL_ENV_SET=0
@@ -163,7 +163,9 @@ downloader() {
 
 		# Download failed
 		if [[ $attempt -lt $MAX_RETRIES ]]; then
-			warn "Download failed (attempt $attempt/$MAX_RETRIES). Retrying in ${delay}s..."
+			if [[ $attempt -ge 3 ]]; then
+				warn "Download failed (attempt $attempt/$MAX_RETRIES). Retrying in ${delay}s..."
+			fi
 			sleep "$delay"
 			delay=$((delay * 2))
 			attempt=$((attempt + 1))
