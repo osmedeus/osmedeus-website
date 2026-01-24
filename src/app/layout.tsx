@@ -34,10 +34,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/osmedeus-logo.png",
-        width: 512,
-        height: 512,
-        alt: "Osmedeus",
+        url: "/banner.png",
+        width: 1280,
+        height: 640,
+        alt: "Osmedeus - Security Orchestration Engine",
       },
     ],
   },
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Osmedeus - Security Orchestration Engine",
     description: "Osmedeus - Modern Orchestration Engine for Security",
-    images: ["/osmedeus-logo.png"],
+    images: ["/banner.png"],
   },
   robots: {
     index: true,

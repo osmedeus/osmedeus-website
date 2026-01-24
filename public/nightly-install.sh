@@ -10,6 +10,11 @@ BIN_DIR="$HOME/.local/bin"
 GITHUB_REPO="j3ssie/osmedeus"
 GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
 NIGHTLY_VERSION="v0.0.0-nightly"
+
+# Retry configuration
+MAX_RETRIES=5
+INITIAL_RETRY_DELAY=2  # seconds
+
 OSM_URL_ENV_SET=0
 if [[ -n "${OSM_URL+x}" ]]; then
 	OSM_URL_ENV_SET=1
@@ -112,10 +117,12 @@ detect_platform() {
 	echo "$target"
 }
 
-# Robust downloader that handles snap curl issues
+# Robust downloader that handles snap curl issues with retry logic
 downloader() {
 	local url="$1"
 	local output_file="$2"
+	local attempt=1
+	local delay=$INITIAL_RETRY_DELAY
 
 	# Check if we have a broken snap curl
 	local snap_curl=0
@@ -127,18 +134,43 @@ downloader() {
 		fi
 	fi
 
-	# Check if we have a working (non-snap) curl
-	if command_exists curl && [[ $snap_curl -eq 0 ]]; then
-		curl -fsSL "$url" -o "$output_file"
-	# Try wget for both no curl and the broken snap curl
-	elif command_exists wget; then
-		wget -q --show-progress "$url" -O "$output_file"
-	# If we can't fall back from broken snap curl to wget, report the broken snap curl
-	elif [[ $snap_curl -eq 1 ]]; then
-		error "curl installed with snap cannot download files due to missing permissions. Please uninstall it and reinstall curl with a different package manager (e.g., apt)."
-	else
-		error "Neither curl nor wget found. Please install one of them."
-	fi
+	while [[ $attempt -le $MAX_RETRIES ]]; do
+		# Remove any partial download from previous attempt
+		rm -f "$output_file" 2>/dev/null || true
+
+		local download_success=0
+
+		# Check if we have a working (non-snap) curl
+		if command_exists curl && [[ $snap_curl -eq 0 ]]; then
+			if curl -fsSL "$url" -o "$output_file" 2>/dev/null; then
+				download_success=1
+			fi
+		# Try wget for both no curl and the broken snap curl
+		elif command_exists wget; then
+			if wget -q --show-progress "$url" -O "$output_file" 2>/dev/null; then
+				download_success=1
+			fi
+		# If we can't fall back from broken snap curl to wget, report the broken snap curl
+		elif [[ $snap_curl -eq 1 ]]; then
+			error "curl installed with snap cannot download files due to missing permissions. Please uninstall it and reinstall curl with a different package manager (e.g., apt)."
+		else
+			error "Neither curl nor wget found. Please install one of them."
+		fi
+
+		if [[ $download_success -eq 1 ]]; then
+			return 0
+		fi
+
+		# Download failed
+		if [[ $attempt -lt $MAX_RETRIES ]]; then
+			warn "Download failed (attempt $attempt/$MAX_RETRIES). Retrying in ${delay}s..."
+			sleep "$delay"
+			delay=$((delay * 2))
+			attempt=$((attempt + 1))
+		else
+			error "Download failed after $MAX_RETRIES attempts. URL: $url"
+		fi
+	done
 }
 
 # Download file with progress
