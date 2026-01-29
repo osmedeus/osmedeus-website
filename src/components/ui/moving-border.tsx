@@ -87,24 +87,43 @@ function MovingBorderSvg({
   ry?: string;
 }) {
   const pathRef = useRef<SVGRectElement>(null);
+  const gradientId = React.useId();
   const progress = useMotionValue<number>(0);
 
   useAnimationFrame((time) => {
-    const length = pathRef.current?.getTotalLength();
-    if (length) {
-      const pxPerMs = length / duration;
-      progress.set((time * pxPerMs) % length);
+    const el = pathRef.current;
+    if (!el) return;
+
+    let length = 0;
+    try {
+      length = el.getTotalLength();
+    } catch {
+      length = 0;
     }
+
+    if (!length) return;
+
+    const pxPerMs = length / duration;
+    progress.set((time * pxPerMs) % length);
   });
 
-  const x = useTransform(
-    progress,
-    (val) => pathRef.current?.getPointAtLength(val).x
-  );
-  const y = useTransform(
-    progress,
-    (val) => pathRef.current?.getPointAtLength(val).y
-  );
+  const getPointAt = (val: number) => {
+    const el = pathRef.current;
+    if (!el) return { x: 0, y: 0 };
+
+    try {
+      const length = el.getTotalLength();
+      if (!length || !Number.isFinite(length)) return { x: 0, y: 0 };
+
+      const safeVal = ((val % length) + length) % length;
+      return el.getPointAtLength(safeVal);
+    } catch {
+      return { x: 0, y: 0 };
+    }
+  };
+
+  const x = useTransform(progress, (val) => getPointAt(val).x);
+  const y = useTransform(progress, (val) => getPointAt(val).y);
 
   const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) translateX(-50%) translateY(-50%)`;
 
@@ -131,12 +150,20 @@ function MovingBorderSvg({
         rx={rx}
         ry={ry}
         strokeWidth="2"
-        stroke="url(#gradient)"
+        stroke={`url(#${gradientId})`}
         strokeLinecap="round"
         style={{
           pathLength: 0.05,
           pathOffset: useTransform(progress, (val) => {
-            const length = pathRef.current?.getTotalLength();
+            const el = pathRef.current;
+            if (!el) return 0;
+
+            let length = 0;
+            try {
+              length = el.getTotalLength();
+            } catch {
+              length = 0;
+            }
             return length ? val / length : 0;
           }),
         }}
@@ -145,14 +172,14 @@ function MovingBorderSvg({
         cx="0"
         cy="0"
         r="12"
-        fill="url(#gradient)"
+        fill={`url(#${gradientId})`}
         style={{
           transform,
           opacity: 0.8,
         }}
       />
       <defs>
-        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="rgba(255, 255, 255, 0.5)" />
           <stop offset="50%" stopColor="rgba(255, 255, 255, 0.8)" />
           <stop offset="100%" stopColor="rgba(255, 255, 255, 0.5)" />

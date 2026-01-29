@@ -91,6 +91,7 @@ function ShowcaseImage({
         alt={alt}
         fill
         priority={priority}
+        unoptimized
         sizes="(min-width: 768px) 33vw, 100vw"
         className="object-contain p-6"
       />
@@ -152,6 +153,7 @@ function ImageModal({
             src={image.src}
             alt={image.alt}
             fill
+            unoptimized
             sizes="92vw"
             className="object-contain p-6"
             priority

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
@@ -50,7 +51,13 @@ const socialLinks = [
 
 export function Footer() {
   const { resolvedTheme, setTheme } = useTheme();
-  const isDark = (resolvedTheme ?? "dark") === "dark";
+  const [mounted, setMounted] = useState(false);
+  const isDark = mounted ? resolvedTheme === "dark" : true;
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   return (
     <footer className="relative border-t border-[var(--border)] bg-[var(--background)]">
@@ -152,7 +159,8 @@ export function Footer() {
         {/* Bottom */}
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <p className="text-sm text-[var(--muted)]">
-            &copy; {new Date().getFullYear()} Osmedeus. All rights reserved.
+            &copy; <span suppressHydrationWarning>{new Date().getFullYear()}</span>{" "}
+            Osmedeus. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <Button

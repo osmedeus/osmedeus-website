@@ -1,9 +1,90 @@
 1:"$Sreact.fragment"
 2:I[79520,["/_next/static/chunks/d2e625ec1f1a7135.js"],""]
-3:I[27423,["/_next/static/chunks/d2e625ec1f1a7135.js"],"ThemeProvider"]
-4:I[39756,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
-5:I[37457,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
-6:I[19455,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/94c5b4ab1926bf56.js"],"Button"]
-7:I[22016,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/94c5b4ab1926bf56.js"],""]
+4:I[27423,["/_next/static/chunks/d2e625ec1f1a7135.js"],"ThemeProvider"]
+5:I[39756,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
+6:I[37457,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
+7:I[19455,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/822e36e6a3eec3ca.js"],"Button"]
+8:I[22016,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/822e36e6a3eec3ca.js"],""]
 :HL["/_next/static/chunks/5ecc0a2af2d9d870.css","style"]
-0:{"buildId":"j0H49gn7y_X__Tf__YRjY","rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/5ecc0a2af2d9d870.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/d2e625ec1f1a7135.js","async":true}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_5901b7c6-module__ec5Qua__variable antialiased","children":[["$","$L2",null,{"id":"suppress-abort-errors","strategy":"beforeInteractive","children":"(()=>{\nconst shouldSuppress=(v)=>{\n  const s=String(v??\"\");\n  return s.includes(\"net::ERR_ABORTED\")||s.includes(\"AbortError\")||s.includes(\"aborted\")||s.includes(\"ERR_ABORTED\");\n};\nconst patch=(k)=>{\n  const orig=console[k];\n  if(typeof orig!==\"function\") return;\n  console[k]=(...args)=>{\n    if(args.some(shouldSuppress)) return;\n    orig(...args);\n  };\n};\npatch(\"error\");\npatch(\"warn\");\npatch(\"log\");\nwindow.addEventListener(\"unhandledrejection\",(e)=>{\n  if(shouldSuppress(e.reason)) e.preventDefault();\n});\nwindow.addEventListener(\"error\",(e)=>{\n  if(shouldSuppress(e.message)) e.preventDefault();\n},true);\n})();"}],["$","$L3",null,{"attribute":"data-theme","defaultTheme":"dark","enableSystem":false,"disableTransitionOnChange":true,"children":["$","$L4",null,{"parallelRouterKey":"children","template":["$","$L5",null,{}],"notFound":[["$","main",null,{"className":"mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-sm text-[var(--muted)]","children":"404"}],["$","h1",null,{"className":"mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl","children":"Page not found"}],["$","p",null,{"className":"mt-4 text-base text-[var(--muted)]","children":"The page you’re looking for doesn’t exist."}],["$","div",null,{"className":"mt-8 flex items-center gap-3","children":[["$","$L6",null,{"asChild":true,"variant":"movingBorder","size":"lg","children":["$","$L7",null,{"href":"/","children":"Back to home"}]}],["$","$L6",null,{"asChild":true,"variant":"outline","size":"lg","className":"border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white","children":["$","a",null,{"href":"https://docs.osmedeus.org","target":"_blank","rel":"noopener noreferrer","children":"Documentation"}]}]]}]]}],[]]}]}]]}]}]]}],"loading":null,"isPartial":false}
+3:T6f2,(function () {
+  function shouldSuppress(v) {
+    var s = "";
+    try {
+      s = String(v == null ? "" : v);
+    } catch (e) {
+      s = "";
+    }
+    return (
+      s.indexOf("net::ERR_ABORTED") !== -1 ||
+      s.indexOf("AbortError") !== -1 ||
+      s.indexOf("aborted") !== -1 ||
+      s.indexOf("ERR_ABORTED") !== -1
+    );
+  }
+
+  function patchConsole(method) {
+    try {
+      var c = window.console;
+      if (!c) return;
+
+      var orig = c[method];
+      if (typeof orig !== "function") return;
+
+      var wrapped = function () {
+        try {
+          for (var i = 0; i < arguments.length; i++) {
+            if (shouldSuppress(arguments[i])) return;
+          }
+        } catch (e) {}
+
+        try {
+          return orig.apply(c, arguments);
+        } catch (e) {
+          try {
+            return orig.apply(null, arguments);
+          } catch (e2) {}
+        }
+      };
+
+      try {
+        c[method] = wrapped;
+      } catch (e) {
+        try {
+          Object.defineProperty(c, method, {
+            value: wrapped,
+            configurable: true,
+            writable: true
+          });
+        } catch (e2) {}
+      }
+    } catch (e) {}
+  }
+
+  patchConsole("error");
+  patchConsole("warn");
+  patchConsole("log");
+
+  try {
+    if (!window.addEventListener) return;
+
+    window.addEventListener("unhandledrejection", function (e) {
+      try {
+        if (shouldSuppress(e && e.reason) && e && e.preventDefault) {
+          e.preventDefault();
+        }
+      } catch (err) {}
+    });
+
+    window.addEventListener(
+      "error",
+      function (e) {
+        try {
+          if (shouldSuppress(e && e.message) && e && e.preventDefault) {
+            e.preventDefault();
+          }
+        } catch (err) {}
+      },
+      true
+    );
+  } catch (e) {}
+})();0:{"buildId":"3LOXtTIYE1vgdGXI2_o6R","rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/5ecc0a2af2d9d870.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/d2e625ec1f1a7135.js","async":true}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_5901b7c6-module__ec5Qua__variable antialiased","children":[["$","$L2",null,{"id":"suppress-abort-errors","strategy":"beforeInteractive","children":"$3"}],["$","$L4",null,{"attribute":"data-theme","defaultTheme":"dark","enableSystem":false,"disableTransitionOnChange":true,"children":["$","$L5",null,{"parallelRouterKey":"children","template":["$","$L6",null,{}],"notFound":[["$","main",null,{"className":"mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-sm text-[var(--muted)]","children":"404"}],["$","h1",null,{"className":"mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl","children":"Page not found"}],["$","p",null,{"className":"mt-4 text-base text-[var(--muted)]","children":"The page you’re looking for doesn’t exist."}],["$","div",null,{"className":"mt-8 flex items-center gap-3","children":[["$","$L7",null,{"asChild":true,"variant":"movingBorder","size":"lg","children":["$","$L8",null,{"href":"/","children":"Back to home"}]}],["$","$L7",null,{"asChild":true,"variant":"outline","size":"lg","className":"border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white","children":["$","a",null,{"href":"https://docs.osmedeus.org","target":"_blank","rel":"noopener noreferrer","children":"Documentation"}]}]]}]]}],[]]}]}]]}]}]]}],"loading":null,"isPartial":false}

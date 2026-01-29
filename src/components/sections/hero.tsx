@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type KeyboardEvent } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useTheme } from "next-themes";
@@ -113,7 +113,13 @@ export function Hero({
   installBaseUrl?: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { resolvedTheme } = useTheme();
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const installCommand = useMemo(() => {
     return `curl -fsSL ${installBaseUrl}/install.sh | bash`;
@@ -286,10 +292,11 @@ export function Hero({
             <div className="group relative w-full max-w-6xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
               <div className="flex w-max items-center gap-x-12 py-2 pr-12 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
                 {[...trustedCompanies, ...trustedCompanies].map((company, index) => {
+                  const theme = mounted ? resolvedTheme : "dark";
                   const logoSrc =
                     typeof company.logo === "string"
                       ? company.logo
-                      : resolvedTheme === "light"
+                      : theme === "light"
                         ? company.logo.light
                         : company.logo.dark;
 

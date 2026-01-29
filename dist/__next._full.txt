@@ -1,27 +1,112 @@
 1:"$Sreact.fragment"
 2:I[79520,["/_next/static/chunks/d2e625ec1f1a7135.js"],""]
-3:I[27423,["/_next/static/chunks/d2e625ec1f1a7135.js"],"ThemeProvider"]
-4:I[39756,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
-5:I[37457,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
-6:I[19455,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/94c5b4ab1926bf56.js"],"Button"]
-7:I[22016,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/94c5b4ab1926bf56.js"],""]
-9:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"OutletBoundary"]
-a:"$Sreact.suspense"
-c:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"ViewportBoundary"]
-e:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"MetadataBoundary"]
-10:I[68027,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
+4:I[27423,["/_next/static/chunks/d2e625ec1f1a7135.js"],"ThemeProvider"]
+5:I[39756,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
+6:I[37457,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
+7:I[19455,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/822e36e6a3eec3ca.js"],"Button"]
+8:I[22016,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/822e36e6a3eec3ca.js"],""]
+e:I[68027,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"default"]
 :HL["/_next/static/chunks/5ecc0a2af2d9d870.css","style"]
 :HL["/_next/static/media/83afe278b6a6bb3c-s.p.3a6ba036.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"P":null,"b":"j0H49gn7y_X__Tf__YRjY","c":["",""],"q":"","i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/5ecc0a2af2d9d870.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/d2e625ec1f1a7135.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_5901b7c6-module__ec5Qua__variable antialiased","children":[["$","$L2",null,{"id":"suppress-abort-errors","strategy":"beforeInteractive","children":"(()=>{\nconst shouldSuppress=(v)=>{\n  const s=String(v??\"\");\n  return s.includes(\"net::ERR_ABORTED\")||s.includes(\"AbortError\")||s.includes(\"aborted\")||s.includes(\"ERR_ABORTED\");\n};\nconst patch=(k)=>{\n  const orig=console[k];\n  if(typeof orig!==\"function\") return;\n  console[k]=(...args)=>{\n    if(args.some(shouldSuppress)) return;\n    orig(...args);\n  };\n};\npatch(\"error\");\npatch(\"warn\");\npatch(\"log\");\nwindow.addEventListener(\"unhandledrejection\",(e)=>{\n  if(shouldSuppress(e.reason)) e.preventDefault();\n});\nwindow.addEventListener(\"error\",(e)=>{\n  if(shouldSuppress(e.message)) e.preventDefault();\n},true);\n})();"}],["$","$L3",null,{"attribute":"data-theme","defaultTheme":"dark","enableSystem":false,"disableTransitionOnChange":true,"children":["$","$L4",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-sm text-[var(--muted)]","children":"404"}],["$","h1",null,{"className":"mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl","children":"Page not found"}],["$","p",null,{"className":"mt-4 text-base text-[var(--muted)]","children":"The page you’re looking for doesn’t exist."}],["$","div",null,{"className":"mt-8 flex items-center gap-3","children":[["$","$L6",null,{"asChild":true,"variant":"movingBorder","size":"lg","children":["$","$L7",null,{"href":"/","children":"Back to home"}]}],["$","$L6",null,{"asChild":true,"variant":"outline","size":"lg","className":"border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white","children":["$","a",null,{"href":"https://docs.osmedeus.org","target":"_blank","rel":"noopener noreferrer","children":"Documentation"}]}]]}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":[["$","$1","c",{"children":["$L8",[["$","script","script-0",{"src":"/_next/static/chunks/ff1a16fafef87110.js","async":true,"nonce":"$undefined"}],["$","script","script-1",{"src":"/_next/static/chunks/2224ab025c379af9.js","async":true,"nonce":"$undefined"}],["$","script","script-2",{"src":"/_next/static/chunks/fbab0705a4ec52f7.js","async":true,"nonce":"$undefined"}]],["$","$L9",null,{"children":["$","$a",null,{"name":"Next.MetadataOutlet","children":"$@b"}]}]]}],{},null,false,false]},null,false,false],["$","$1","h",{"children":[null,["$","$Lc",null,{"children":"$Ld"}],["$","div",null,{"hidden":true,"children":["$","$Le",null,{"children":["$","$a",null,{"name":"Next.Metadata","children":"$Lf"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}],false]],"m":"$undefined","G":["$10",[]],"S":true}
-11:I[2874,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"Navbar"]
-12:I[63438,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"Hero"]
-13:I[37788,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"Features"]
-14:I[73110,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"HowItWorks"]
-15:I[16222,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"CodeExample"]
-16:I[99486,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"WorkflowClient"]
-17:I[68245,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/2224ab025c379af9.js","/_next/static/chunks/fbab0705a4ec52f7.js"],"Footer"]
-8:["$","main",null,{"className":"min-h-screen","children":[["$","$L11",null,{}],["$","$L12",null,{"installBaseUrl":"https://osmedeus.org"}],["$","$L13",null,{}],["$","$L14",null,{}],["$","$L15",null,{}],["$","$L16",null,{"tabs":[{"id":"flow","label":"Flow","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: flow\nname: demo-flow\ndescription: Demo flow orchestrating modules with decision routing\nparams:\n  - name: threads\n    default: \"5\"\n  - name: mode\n    default: \"full\"\nmodules:\n  - name: bash-module\n    path: sub-module/demo-bash.yaml\n    params:\n      threads: \"{{threads}}\"\n\n  - name: docker-module\n    path: sub-module/demo-docker.yaml\n    depends_on: [bash-module]\n    condition: \"{{mode}} == 'full'\"\n    on_success:\n      - action: export\n        name: scan_status\n        value: \"complete\"\n    decision:\n      switch: \"{{scan_status}}\"\n      cases:\n        \"complete\": { goto: ssh-module }\n      default: { goto: _end }\n\n  - name: ssh-module\n    path: sub-module/demo-ssh.yaml\n    depends_on: [docker-module]"},{"id":"bash","label":"Bash","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-bash\ndescription: Demo bash steps with functions and exports\nparams:\n  - name: target\n    required: true\n  - name: threads\n    default: \"5\"\nsteps:\n  - name: setup\n    type: bash\n    command: mkdir -p {{Output}}/demo && echo \"{{Target}}\" > {{Output}}/demo/target.txt\n    exports:\n      target_file: \"{{Output}}/demo/target.txt\"\n  - name: run-parallel\n    type: bash\n    parallel_commands:\n      - 'echo \"Thread 1: {{Target}}\" >> {{Output}}/demo/results.txt'\n      - 'echo \"Thread 2: {{Target}}\" >> {{Output}}/demo/results.txt'\n  - name: check-result\n    type: function\n    function: 'fileLength(\"{{Output}}/demo/results.txt\")'\n    exports:\n      line_count: \"output\"\n  - name: summary\n    type: bash\n    command: 'echo \"Processed {{Target}} with {{line_count}} lines\"'"},{"id":"docker","label":"Docker","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-docker\ndescription: Demo Docker runner with remote-bash\nparams:\n  - name: target\n    required: true\nsteps:\n  - name: docker-single\n    type: remote-bash\n    log: \"Running in Alpine container\"\n    step_runner: docker\n    step_runner_config:\n      image: alpine:latest\n      volumes:\n        - \"{{Output}}:/output\"\n    command: 'echo \"Target: {{Target}}\" > /output/docker-out.txt'\n  - name: docker-parallel\n    type: remote-bash\n    step_runner: docker\n    step_runner_config:\n      image: alpine:latest\n    parallel_commands:\n      - 'echo \"Scan A: {{Target}}\"'\n      - 'echo \"Scan B: {{Target}}\"'\n    exports:\n      docker_done: \"true\""},{"id":"ssh","label":"SSH","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-ssh\ndescription: Demo SSH runner with remote-bash\nparams:\n  - name: target\n    required: true\n  - name: ssh_host\n    default: \"localhost\"\n  - name: ssh_user\n    default: \"testuser\"\n  - name: ssh_password\n    default: \"testpass\"\n\nsteps:\n  - name: ssh-connect\n    type: remote-bash\n    log: \"Executing via SSH\"\n    step_runner: ssh\n    step_runner_config:\n      host: \"{{ssh_host}}\"\n      port: 2222\n      user: \"{{ssh_user}}\"\n      password: \"{{ssh_password}}\"\n    commands:\n      - 'echo \"Target: {{Target}}\"'\n      - 'hostname && whoami'\n    exports:\n      ssh_done: \"true\""}]}],["$","$L17",null,{}]]}]
-d:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
-18:I[27201,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"IconMark"]
-b:null
-f:[["$","title","0",{"children":"Osmedeus - Security Orchestration Engine"}],["$","meta","1",{"name":"description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","2",{"name":"author","content":"Osmedeus Team"}],["$","meta","3",{"name":"keywords","content":"security,automation,orchestration,pentesting,vulnerability scanning,reconnaissance"}],["$","meta","4",{"name":"robots","content":"index, follow"}],["$","meta","5",{"property":"og:title","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","6",{"property":"og:description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","7",{"property":"og:url","content":"https://osmedeus.org/"}],["$","meta","8",{"property":"og:site_name","content":"Osmedeus"}],["$","meta","9",{"property":"og:locale","content":"en_US"}],["$","meta","10",{"property":"og:image","content":"https://osmedeus.org/banner.png"}],["$","meta","11",{"property":"og:image:width","content":"1280"}],["$","meta","12",{"property":"og:image:height","content":"640"}],["$","meta","13",{"property":"og:image:alt","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","14",{"property":"og:type","content":"website"}],["$","meta","15",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","16",{"name":"twitter:title","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","17",{"name":"twitter:description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","18",{"name":"twitter:image","content":"https://osmedeus.org/banner.png"}],["$","link","19",{"rel":"icon","href":"/favicon.ico"}],["$","$L18","20",{}]]
+3:T6f2,(function () {
+  function shouldSuppress(v) {
+    var s = "";
+    try {
+      s = String(v == null ? "" : v);
+    } catch (e) {
+      s = "";
+    }
+    return (
+      s.indexOf("net::ERR_ABORTED") !== -1 ||
+      s.indexOf("AbortError") !== -1 ||
+      s.indexOf("aborted") !== -1 ||
+      s.indexOf("ERR_ABORTED") !== -1
+    );
+  }
+
+  function patchConsole(method) {
+    try {
+      var c = window.console;
+      if (!c) return;
+
+      var orig = c[method];
+      if (typeof orig !== "function") return;
+
+      var wrapped = function () {
+        try {
+          for (var i = 0; i < arguments.length; i++) {
+            if (shouldSuppress(arguments[i])) return;
+          }
+        } catch (e) {}
+
+        try {
+          return orig.apply(c, arguments);
+        } catch (e) {
+          try {
+            return orig.apply(null, arguments);
+          } catch (e2) {}
+        }
+      };
+
+      try {
+        c[method] = wrapped;
+      } catch (e) {
+        try {
+          Object.defineProperty(c, method, {
+            value: wrapped,
+            configurable: true,
+            writable: true
+          });
+        } catch (e2) {}
+      }
+    } catch (e) {}
+  }
+
+  patchConsole("error");
+  patchConsole("warn");
+  patchConsole("log");
+
+  try {
+    if (!window.addEventListener) return;
+
+    window.addEventListener("unhandledrejection", function (e) {
+      try {
+        if (shouldSuppress(e && e.reason) && e && e.preventDefault) {
+          e.preventDefault();
+        }
+      } catch (err) {}
+    });
+
+    window.addEventListener(
+      "error",
+      function (e) {
+        try {
+          if (shouldSuppress(e && e.message) && e && e.preventDefault) {
+            e.preventDefault();
+          }
+        } catch (err) {}
+      },
+      true
+    );
+  } catch (e) {}
+})();0:{"P":null,"b":"3LOXtTIYE1vgdGXI2_o6R","c":["",""],"q":"","i":false,"f":[[["",{"children":["__PAGE__",{}]},"$undefined","$undefined",true],[["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/5ecc0a2af2d9d870.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}],["$","script","script-0",{"src":"/_next/static/chunks/d2e625ec1f1a7135.js","async":true,"nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":["$","body",null,{"className":"inter_5901b7c6-module__ec5Qua__variable antialiased","children":[["$","$L2",null,{"id":"suppress-abort-errors","strategy":"beforeInteractive","children":"$3"}],["$","$L4",null,{"attribute":"data-theme","defaultTheme":"dark","enableSystem":false,"disableTransitionOnChange":true,"children":["$","$L5",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L6",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[["$","main",null,{"className":"mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-sm text-[var(--muted)]","children":"404"}],["$","h1",null,{"className":"mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl","children":"Page not found"}],["$","p",null,{"className":"mt-4 text-base text-[var(--muted)]","children":"The page you’re looking for doesn’t exist."}],["$","div",null,{"className":"mt-8 flex items-center gap-3","children":[["$","$L7",null,{"asChild":true,"variant":"movingBorder","size":"lg","children":["$","$L8",null,{"href":"/","children":"Back to home"}]}],["$","$L7",null,{"asChild":true,"variant":"outline","size":"lg","className":"border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white","children":["$","a",null,{"href":"https://docs.osmedeus.org","target":"_blank","rel":"noopener noreferrer","children":"Documentation"}]}]]}]]}],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]]}]}]]}],{"children":[["$","$1","c",{"children":["$L9",[["$","script","script-0",{"src":"/_next/static/chunks/ff1a16fafef87110.js","async":true,"nonce":"$undefined"}],"$La","$Lb"],"$Lc"]}],{},null,false,false]},null,false,false],"$Ld",false]],"m":"$undefined","G":["$e",[]],"S":true}
+f:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"OutletBoundary"]
+10:"$Sreact.suspense"
+12:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"ViewportBoundary"]
+14:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"MetadataBoundary"]
+16:I[2874,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"Navbar"]
+17:I[63438,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"Hero"]
+18:I[37788,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"Features"]
+19:I[73110,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"HowItWorks"]
+1a:I[16222,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"CodeExample"]
+1b:I[99486,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"WorkflowClient"]
+1c:I[68245,["/_next/static/chunks/d2e625ec1f1a7135.js","/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/92fae1089b075807.js","/_next/static/chunks/a2d96873fdd84708.js"],"Footer"]
+a:["$","script","script-1",{"src":"/_next/static/chunks/92fae1089b075807.js","async":true,"nonce":"$undefined"}]
+b:["$","script","script-2",{"src":"/_next/static/chunks/a2d96873fdd84708.js","async":true,"nonce":"$undefined"}]
+c:["$","$Lf",null,{"children":["$","$10",null,{"name":"Next.MetadataOutlet","children":"$@11"}]}]
+d:["$","$1","h",{"children":[null,["$","$L12",null,{"children":"$L13"}],["$","div",null,{"hidden":true,"children":["$","$L14",null,{"children":["$","$10",null,{"name":"Next.Metadata","children":"$L15"}]}]}],["$","meta",null,{"name":"next-size-adjust","content":""}]]}]
+9:["$","main",null,{"className":"min-h-screen","children":[["$","$L16",null,{}],["$","$L17",null,{"installBaseUrl":"https://osmedeus.org"}],["$","$L18",null,{}],["$","$L19",null,{}],["$","$L1a",null,{}],["$","$L1b",null,{"tabs":[{"id":"flow","label":"Flow","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: flow\nname: demo-flow\ndescription: Demo flow orchestrating modules with decision routing\nparams:\n  - name: threads\n    default: \"5\"\n  - name: mode\n    default: \"full\"\nmodules:\n  - name: bash-module\n    path: sub-module/demo-bash.yaml\n    params:\n      threads: \"{{threads}}\"\n\n  - name: docker-module\n    path: sub-module/demo-docker.yaml\n    depends_on: [bash-module]\n    condition: \"{{mode}} == 'full'\"\n    on_success:\n      - action: export\n        name: scan_status\n        value: \"complete\"\n    decision:\n      switch: \"{{scan_status}}\"\n      cases:\n        \"complete\": { goto: ssh-module }\n      default: { goto: _end }\n\n  - name: ssh-module\n    path: sub-module/demo-ssh.yaml\n    depends_on: [docker-module]"},{"id":"bash","label":"Bash","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-bash\ndescription: Demo bash steps with functions and exports\nparams:\n  - name: target\n    required: true\n  - name: threads\n    default: \"5\"\nsteps:\n  - name: setup\n    type: bash\n    command: mkdir -p {{Output}}/demo && echo \"{{Target}}\" > {{Output}}/demo/target.txt\n    exports:\n      target_file: \"{{Output}}/demo/target.txt\"\n  - name: run-parallel\n    type: bash\n    parallel_commands:\n      - 'echo \"Thread 1: {{Target}}\" >> {{Output}}/demo/results.txt'\n      - 'echo \"Thread 2: {{Target}}\" >> {{Output}}/demo/results.txt'\n  - name: check-result\n    type: function\n    function: 'fileLength(\"{{Output}}/demo/results.txt\")'\n    exports:\n      line_count: \"output\"\n  - name: summary\n    type: bash\n    command: 'echo \"Processed {{Target}} with {{line_count}} lines\"'"},{"id":"docker","label":"Docker","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-docker\ndescription: Demo Docker runner with remote-bash\nparams:\n  - name: target\n    required: true\nsteps:\n  - name: docker-single\n    type: remote-bash\n    log: \"Running in Alpine container\"\n    step_runner: docker\n    step_runner_config:\n      image: alpine:latest\n      volumes:\n        - \"{{Output}}:/output\"\n    command: 'echo \"Target: {{Target}}\" > /output/docker-out.txt'\n  - name: docker-parallel\n    type: remote-bash\n    step_runner: docker\n    step_runner_config:\n      image: alpine:latest\n    parallel_commands:\n      - 'echo \"Scan A: {{Target}}\"'\n      - 'echo \"Scan B: {{Target}}\"'\n    exports:\n      docker_done: \"true\""},{"id":"ssh","label":"SSH","code":"# workflow.yaml - Osmedeus Workflow Example\nkind: module\nname: demo-ssh\ndescription: Demo SSH runner with remote-bash\nparams:\n  - name: target\n    required: true\n  - name: ssh_host\n    default: \"localhost\"\n  - name: ssh_user\n    default: \"testuser\"\n  - name: ssh_password\n    default: \"testpass\"\n\nsteps:\n  - name: ssh-connect\n    type: remote-bash\n    log: \"Executing via SSH\"\n    step_runner: ssh\n    step_runner_config:\n      host: \"{{ssh_host}}\"\n      port: 2222\n      user: \"{{ssh_user}}\"\n      password: \"{{ssh_password}}\"\n    commands:\n      - 'echo \"Target: {{Target}}\"'\n      - 'hostname && whoami'\n    exports:\n      ssh_done: \"true\""}]}],["$","$L1c",null,{}]]}]
+13:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+1d:I[27201,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/7340adf74ff47ec0.js"],"IconMark"]
+11:null
+15:[["$","title","0",{"children":"Osmedeus - Security Orchestration Engine"}],["$","meta","1",{"name":"description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","2",{"name":"author","content":"Osmedeus Team"}],["$","meta","3",{"name":"keywords","content":"security,automation,orchestration,pentesting,vulnerability scanning,reconnaissance"}],["$","meta","4",{"name":"robots","content":"index, follow"}],["$","meta","5",{"property":"og:title","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","6",{"property":"og:description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","7",{"property":"og:url","content":"https://osmedeus.org/"}],["$","meta","8",{"property":"og:site_name","content":"Osmedeus"}],["$","meta","9",{"property":"og:locale","content":"en_US"}],["$","meta","10",{"property":"og:image","content":"https://osmedeus.org/banner.png"}],["$","meta","11",{"property":"og:image:width","content":"1280"}],["$","meta","12",{"property":"og:image:height","content":"640"}],["$","meta","13",{"property":"og:image:alt","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","14",{"property":"og:type","content":"website"}],["$","meta","15",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","16",{"name":"twitter:title","content":"Osmedeus - Security Orchestration Engine"}],["$","meta","17",{"name":"twitter:description","content":"Osmedeus - Modern Orchestration Engine for Security"}],["$","meta","18",{"name":"twitter:image","content":"https://osmedeus.org/banner.png"}],["$","link","19",{"rel":"icon","href":"/favicon.ico"}],["$","$L1d","20",{}]]
