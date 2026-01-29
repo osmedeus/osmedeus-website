@@ -70,7 +70,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           {/* CTA */}
           <a
-            href="https://docs.osmedeus.org/others/sponsor"
+            href="https://docs.osmedeus.org/sponsor"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden sm:block"
