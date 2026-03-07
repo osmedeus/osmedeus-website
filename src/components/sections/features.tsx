@@ -29,10 +29,10 @@ const features = [
     icon: PuzzleIcon,
   },
   {
-    title: "Integrated Platform",
+    title: "Agent & LLM Integration",
     description:
-      "REST API, databases, cloud storage, notifications, snapshots, and Nix tooling",
-    icon: CloudIcon,
+      "Built-in AI agents and LLM-powered actions for intelligent automation and decision-making",
+    icon: BotIcon,
   },
   {
     title: "Beautiful Web UI",
@@ -144,7 +144,7 @@ function PuzzleIcon({ className }: { className?: string }) {
   );
 }
 
-function CloudIcon({ className }: { className?: string }) {
+function BotIcon({ className }: { className?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -156,7 +156,12 @@ function CloudIcon({ className }: { className?: string }) {
       strokeLinejoin="round"
       className={className}
     >
-      <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z" />
+      <path d="M12 8V4H8" />
+      <rect width="16" height="12" x="4" y="8" rx="2" />
+      <path d="M2 14h2" />
+      <path d="M20 14h2" />
+      <path d="M15 13v2" />
+      <path d="M9 13v2" />
     </svg>
   );
 }

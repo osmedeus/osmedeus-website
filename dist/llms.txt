@@ -1,0 +1,88 @@
+# Osmedeus
+
+> Osmedeus is a modern orchestration engine for security. It simplifies complex workflow automation into auditable YAML definitions, with encrypted data handling, secure credential management, and sandboxed execution.
+> Built for both beginners and experts, it delivers powerful, composable automation without sacrificing the integrity and safety of your infrastructure.
+
+- Website: https://www.osmedeus.org
+- Documentation: https://docs.osmedeus.org
+- Source Code: https://github.com/j3ssie/osmedeus
+- Contact: https://x.com/j3ssie
+
+## Installation
+
+```bash
+curl -sSL https://www.osmedeus.org/install.sh | bash
+```
+
+## Key Features
+
+- Declarative YAML Workflows: Define pipelines with hooks, decision routing, module exclusion, and conditional branching across multiple runners (host, Docker, SSH)
+- Distributed Execution: Redis-based master-worker pattern with queue system, webhook triggers, and file sync across workers
+- Rich Function Library: 80+ utility functions including nmap integration, tmux sessions, SSH execution, TypeScript/Python scripting, SARIF parsing, and CDN/WAF classification
+- Event-Driven Scheduling: Cron, file-watch, and event triggers with filtering, deduplication, and delayed task queues
+- Agentic LLM Steps: Tool-calling agent loops with sub-agent orchestration, memory management, and structured output; plus ACP subprocess agents (Claude Code, Codex, OpenCode, Gemini)
+- Cloud Infrastructure: Provision and run scans across DigitalOcean, AWS, GCP, Linode, and Azure with cost controls and automatic cleanup
+- Rich CLI Interface: Interactive database queries, bulk function evaluation, workflow linting, progress bars, and comprehensive usage examples
+- REST API & Web UI: Full API server with webhook triggers, database queries, and embedded dashboard for visualization
+
+## Docs
+
+### Getting Started
+
+- [Introduction](https://docs.osmedeus.org/index.md): Welcome to the Osmedeus Documentation
+- [Quickstart](https://docs.osmedeus.org/quickstart.md): Get up and running with Osmedeus in 5 minutes
+- [Basic Configuration](https://docs.osmedeus.org/getting-started/basic-setup.md): Osmedeus configuration management and settings
+- [CLI Interface](https://docs.osmedeus.org/getting-started/cli.md): Command-line interface for Osmedeus
+- [Docker Installation & Setup](https://docs.osmedeus.org/getting-started/docker-setup.md): Containerized setup and execution using Docker
+- [Web UI](https://docs.osmedeus.org/getting-started/web-ui.md): Server and Web UI for Osmedeus
+
+### Workflows
+
+- [Workflow Overview](https://docs.osmedeus.org/workflows/overview.md): Introduction to workflow structure and concepts
+- [Flow Workflows](https://docs.osmedeus.org/workflows/flows.md): Multi-module orchestration with dependencies
+- [Step Types](https://docs.osmedeus.org/workflows/step-types.md): Available step types for workflow execution
+- [Variables and Exports](https://docs.osmedeus.org/workflows/variables.md): Data flow and parameter management
+- [Control Flow](https://docs.osmedeus.org/workflows/control-flow.md): Conditions, routing, and error handling
+
+### Architecture
+
+- [Architecture Overview](https://docs.osmedeus.org/architecture/index.md): Technical architecture overview of the Osmedeus workflow engine
+- [Runners](https://docs.osmedeus.org/architecture/runners.md): Execution environments for commands and steps
+- [Template Engine Architecture](https://docs.osmedeus.org/architecture/templates.md): Deep dive into the Osmedeus template engine implementation
+- [Workflow Architecture](https://docs.osmedeus.org/architecture/workflows.md): Deep dive into the Osmedeus workflow system including fragments and linting
+
+### Advanced
+
+- [Writing Your First Workflow](https://docs.osmedeus.org/advanced/writing-your-first-workflow.md): YAML-based workflow definitions and execution
+- [Extra Configuration](https://docs.osmedeus.org/advanced/api-key-configuration.md): Multiple ways to install Osmedeus
+- [Deployment](https://docs.osmedeus.org/advanced/deployment.md): Deploy Osmedeus as a server
+- [Development](https://docs.osmedeus.org/advanced/development.md): Development and hacking on Osmedeus
+- [Distributed Execution](https://docs.osmedeus.org/advanced/distributed.md): Redis-based master-worker distributed scanning
+- [Event-Driven Triggers](https://docs.osmedeus.org/advanced/event-driven.md): Build reactive automation pipelines with event-driven workflows
+- [Scheduling & Queue](https://docs.osmedeus.org/advanced/scheduling.md): Cron and queue-based task scheduling
+- [LLM & Agents Integration](https://docs.osmedeus.org/advanced/llm.md): Agentic LLM steps and ACP agent integration
+- [Using Osmedeus as a Library](https://docs.osmedeus.org/advanced/library.md): Embed Osmedeus workflow engine in your Go applications
+- [Notification and CDN Configuration](https://docs.osmedeus.org/advanced/notification-and-cdn.md): Notification and CDN setup
+- [Snapshots](https://docs.osmedeus.org/advanced/snapshots.md): Workflow state snapshots
+
+### Reference
+
+- [Workflow Schema Reference](https://docs.osmedeus.org/reference/workflow-schema.md): Complete YAML schema reference for Osmedeus workflows
+- [Type Reference](https://docs.osmedeus.org/reference/types.md): Complete reference for all type constants used in Osmedeus workflows
+- [Default Variables Reference](https://docs.osmedeus.org/reference/variables.md): Complete reference for template variables and utility functions
+- [Functions Overview](https://docs.osmedeus.org/functions/overview.md): Overview of built-in utility functions
+- [Functions Reference](https://docs.osmedeus.org/functions/reference.md): Full function reference with signatures and examples
+- [Osmedeus API Documentation](https://docs.osmedeus.org/api-references/index.md): RESTful API reference for managing security automation workflows
+
+### Extending
+
+- [Adding CLI Commands](https://docs.osmedeus.org/extending/cli-commands.md): Add custom CLI commands
+- [Adding Functions](https://docs.osmedeus.org/extending/functions.md): Add custom utility functions
+- [Adding Runners](https://docs.osmedeus.org/extending/runners.md): Add custom execution runners
+- [Adding Step Types](https://docs.osmedeus.org/extending/step-types.md): Add custom step types
+
+### Other
+
+- [FAQs](https://docs.osmedeus.org/others/faq.md): FAQs and common errors
+- [Premium Edition](https://docs.osmedeus.org/others/premium-edition.md): Exclusive features in the Osmedeus Premium Edition
+- [Security Warning](https://docs.osmedeus.org/others/security-warning.md): Important security notice and disclaimer

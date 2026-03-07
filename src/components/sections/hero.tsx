@@ -114,11 +114,21 @@ export function Hero({
 }) {
   const [copied, setCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [version, setVersion] = useState("v5.0");
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
     const id = requestAnimationFrame(() => setMounted(true));
     return () => cancelAnimationFrame(id);
+  }, []);
+
+  useEffect(() => {
+    fetch("https://api.github.com/repos/j3ssie/osmedeus/releases/latest")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.tag_name) setVersion(data.tag_name);
+      })
+      .catch(() => {});
   }, []);
 
   const installCommand = useMemo(() => {
@@ -168,10 +178,10 @@ export function Hero({
             </span>
             <span className="text-sm text-[var(--muted)]">
               <span className="block sm:hidden">
-                v5.0 - with Next-Level Performance &amp; Power
+                {version} - with Next-Level Performance &amp; Power
               </span>
               <span className="hidden sm:inline">
-                v5.0 Released – Cleaner, More Flexible Architecture and Next Level
+                {version} Released – Cleaner, More Flexible Architecture and Next Level
                 Power
               </span>
             </span>

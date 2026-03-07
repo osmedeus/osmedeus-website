@@ -45,7 +45,7 @@ export function WorkflowClient({
         <FadeInOnScroll delay={0.2} className="mt-12">
           <div className="mx-auto max-w-5xl">
             <Tabs defaultValue={tabs[0]?.id} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 bg-[var(--background)]">
+              <TabsList className="grid w-full grid-cols-5 bg-[var(--background)]">
                 {tabs.map((tab) => (
                   <TabsTrigger
                     key={tab.id}

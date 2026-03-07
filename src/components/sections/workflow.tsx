@@ -133,6 +133,38 @@ steps:
     exports:
       ssh_done: "true"`,
   },
+  {
+    id: "agent",
+    label: "Agent",
+    code: `# workflow.yaml - Osmedeus Workflow Example
+kind: module
+name: test-agent-acp
+description: Test agent-acp step with ACP protocol subprocess
+tags: test,agent-acp,acp
+
+params:
+  - name: target
+    required: true
+    default: example.com
+
+steps:
+  # Basic agent-acp step with built-in agent
+  - name: acp-basic
+    type: agent-acp
+    log: "Running ACP agent for {{Target}}"
+    agent: claude-code
+    messages:
+      - role: user
+        content: "List the files in the current directory and summarize the results."
+    exports:
+      acp_result: "{{acp_output}}"
+
+  # Use ACP output in a subsequent bash step
+  - name: use-acp-output
+    type: bash
+    log: "Using ACP agent output"
+    command: echo "Agent said - {{acp_result}}"`,
+  },
 ] as const;
 
 export function Workflow() {

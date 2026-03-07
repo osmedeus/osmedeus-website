@@ -11,7 +11,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://osmedeus.org"),
-  title: "Osmedeus - Security Orchestration Engine",
+  title: "Osmedeus - Modern Orchestration Engine for Security",
   description: "Osmedeus - Modern Orchestration Engine for Security",
   icons: {
     icon: "/favicon.ico",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Osmedeus Team" }],
   openGraph: {
-    title: "Osmedeus - Security Orchestration Engine",
+    title: "Osmedeus - Modern Orchestration Engine for Security",
     description: "Osmedeus - Modern Orchestration Engine for Security",
     url: "https://osmedeus.org",
     siteName: "Osmedeus",
@@ -37,13 +37,13 @@ export const metadata: Metadata = {
         url: "/banner.png",
         width: 1280,
         height: 640,
-        alt: "Osmedeus - Security Orchestration Engine",
+        alt: "Osmedeus - Modern Orchestration Engine for Security",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Osmedeus - Security Orchestration Engine",
+    title: "Osmedeus - Modern Orchestration Engine for Security",
     description: "Osmedeus - Modern Orchestration Engine for Security",
     images: ["/banner.png"],
   },
