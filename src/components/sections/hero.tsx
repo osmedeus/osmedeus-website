@@ -277,9 +277,9 @@ export function Hero({
               rel="noopener noreferrer"
             >
               <Button
-                variant="outline"
+                variant="movingBorder"
                 size="lg"
-                className="w-[200px] justify-center border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white"
+                className="w-[200px] justify-center bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-white"
               >
                 <BookOpenIcon className="mr-2 h-4 w-4" />
                 Documentation
