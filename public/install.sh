@@ -67,6 +67,21 @@ need_cmd() {
 	fi
 }
 
+# Check optional workflow dependencies and warn if missing
+check_workflow_deps() {
+	local missing=()
+	for cmd in jq make gcc git; do
+		if ! command_exists "$cmd"; then
+			missing+=("$cmd")
+		fi
+	done
+
+	if [[ ${#missing[@]} -gt 0 ]]; then
+		warn "Heads up: ${LIGHT_GREEN}${missing[*]}${NC} not found — some workflow installations might be broken without it."
+		warn "Install them with: ${LIGHT_GREEN}sudo apt-get update && sudo apt-get install -y jq build-essential git${NC}"
+	fi
+}
+
 # Check all prerequisite commands upfront
 check_prereqs() {
 	for cmd in uname mktemp chmod mkdir rm mv tar grep awk cut head sed basename touch; do
@@ -443,6 +458,7 @@ main() {
 
 	# Check prerequisites
 	check_prereqs
+	check_workflow_deps
 
 	# Detect platform
 	local platform
