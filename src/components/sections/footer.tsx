@@ -34,7 +34,7 @@ const socialLinks = [
   },
   {
     label: "Discord",
-    href: "https://discord.gg/gy4SWhpaPU",
+    href: "https://discord.gg/mtQG2FQsYA",
     icon: DiscordIcon,
   },
   {
