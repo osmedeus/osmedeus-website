@@ -21,7 +21,7 @@ const links = {
   ],
   community: [
     { label: "GitHub", href: "https://github.com/j3ssie/osmedeus" },
-    { label: "Discord", href: "https://discord.gg/gy4SWhpaPU" },
+    { label: "Discord", href: "https://discord.gg/mtQG2FQsYA" },
     { label: "Twitter", href: "https://twitter.com/OsijGov" },
   ],
 };
