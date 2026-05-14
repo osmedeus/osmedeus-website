@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import { motion } from "framer-motion";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
@@ -9,6 +10,7 @@ import { MovingBorder } from "@/components/ui/moving-border";
 import { Spotlight } from "@/components/ui/spotlight";
 import { FadeIn } from "@/components/ui/text-generate-effect";
 import { GradientBackground } from "@/components/ui/aurora-background";
+import { useGithubStars } from "@/lib/use-github-stars";
 
 const defaultInstallBaseUrl = "https://osmedeus-website.vercel.app";
 
@@ -115,6 +117,7 @@ export function Hero({
   const [copied, setCopied] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [version, setVersion] = useState("v5.0");
+  const stars = useGithubStars();
   const { resolvedTheme } = useTheme();
 
   useEffect(() => {
@@ -269,6 +272,10 @@ export function Hero({
               >
                 <GithubIcon className="mr-2 h-4 w-4" />
                 GitHub
+                <span className="ml-2 inline-flex items-center gap-1" suppressHydrationWarning>
+                  <span className="font-bold">{stars}</span>
+                  <Star className="!h-3 !w-3 fill-current" />
+                </span>
               </Button>
             </a>
             <a

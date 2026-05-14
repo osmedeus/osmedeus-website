@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useGithubStars } from "@/lib/use-github-stars";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -17,6 +19,7 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const stars = useGithubStars();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -130,6 +133,10 @@ export function Navbar() {
                 <Button variant="outline" size="sm">
                   <GitHubIcon className="mr-2 h-4 w-4" />
                   GitHub
+                  <span className="ml-2 inline-flex items-center gap-1" suppressHydrationWarning>
+                    <span className="font-bold">{stars}</span>
+                    <Star className="!h-3 !w-3 fill-current" />
+                  </span>
                 </Button>
               </a>
               <a
