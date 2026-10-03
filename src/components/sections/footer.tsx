@@ -31,7 +31,6 @@ const columns = [
     links: [
       { label: "Documentation", href: DOCS_URL },
       { label: "Workflows", href: `${DOCS_URL}/workflows` },
-      { label: "Blog", href: `${SITE_URL}/blog` },
       { label: "Changelog", href: `${REPO_URL}/releases` },
     ],
   },
