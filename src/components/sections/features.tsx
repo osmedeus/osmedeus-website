@@ -1,6 +1,14 @@
-"use client";
-
-import { SpotlightCard } from "@/components/ui/spotlight";
+import { CornerBox } from "@/components/ui/corner-box";
+import { RunPlate } from "@/components/diagrams/run-plate";
+import {
+  BlocksIcon,
+  BotIcon,
+  FileCodeIcon,
+  MonitorIcon,
+  NetworkIcon,
+  PuzzleIcon,
+} from "@/components/ui/icons";
+import { Section } from "@/components/ui/section";
 import { FadeInOnScroll } from "@/components/ui/text-generate-effect";
 
 const features = [
@@ -44,161 +52,54 @@ const features = [
 
 export function Features() {
   return (
-    <section id="features" className="relative py-24 sm:py-32">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <FadeInOnScroll className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-            Everything you need for
-            <br />
-            <span className="text-[var(--muted)]">security automation</span>
-          </h2>
-          <p className="mt-4 text-lg text-[var(--muted)]">
-            A complete toolkit for security professionals. From reconnaissance
-            to reporting, Osmedeus handles it all.
-          </p>
-        </FadeInOnScroll>
-
-        {/* Features Grid */}
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature, index) => (
-            <FadeInOnScroll
-              key={feature.title}
-              delay={index * 0.1}
-              duration={0.5}
-            >
-              <SpotlightCard className="h-full">
-                <div className="relative z-10">
-                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-[var(--surface-2)]">
-                    <feature.icon className="h-6 w-6 text-[var(--foreground)]" />
-                  </div>
-                  <h3 className="text-lg font-semibold">{feature.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
-                    {feature.description}
-                  </p>
-                </div>
-              </SpotlightCard>
-            </FadeInOnScroll>
-          ))}
+    <Section
+      id="features"
+      eyebrow="Features"
+      title="Everything you need for"
+      muted="security automation"
+      lede="A complete toolkit for security professionals. From reconnaissance to reporting, Osmedeus handles it all."
+    >
+      {/*
+        One run, end to end — the claim above drawn out before it is broken
+        into six. The figure comes first because a reader who has seen the
+        machine move reads the list as parts of one thing.
+      */}
+      <FadeInOnScroll delay={0.08}>
+        <div className="mt-12 border bg-[var(--inset)] px-2 py-4 sm:px-6 sm:py-6">
+          <RunPlate className="aspect-[640/240] w-full" />
         </div>
+      </FadeInOnScroll>
+
+      {/*
+        One hairline grid, not six cards: cells share their edges, so the
+        section reads as a table of capabilities rather than a pile of boxes.
+      */}
+      <div className="mt-10 grid border-t border-l sm:grid-cols-2 lg:grid-cols-3">
+        {features.map((feature, index) => (
+          <FadeInOnScroll
+            key={feature.title}
+            delay={(index % 3) * 0.08}
+            duration={0.6}
+            className="border-r border-b"
+          >
+            <CornerBox
+              flush
+              hoverOnly
+              stripes
+              bordered={false}
+              className="group h-full p-6"
+            >
+              <feature.icon className="h-[18px] w-[18px] text-[var(--text-3)] transition-colors group-hover:text-[var(--accent-fg)]" />
+              <h3 className="mt-5 text-[15px] font-medium text-[var(--text-1)]">
+                {feature.title}
+              </h3>
+              <p className="mt-2 text-[14px] leading-[150%] text-[var(--text-2)]">
+                {feature.description}
+              </p>
+            </CornerBox>
+          </FadeInOnScroll>
+        ))}
       </div>
-    </section>
-  );
-}
-
-function FileCodeIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M10 12.5 8 15l2 2.5" />
-      <path d="m14 12.5 2 2.5-2 2.5" />
-      <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-      <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z" />
-    </svg>
-  );
-}
-
-function NetworkIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect x="16" y="16" width="6" height="6" rx="1" />
-      <rect x="2" y="16" width="6" height="6" rx="1" />
-      <rect x="9" y="2" width="6" height="6" rx="1" />
-      <path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3" />
-      <path d="M12 12V8" />
-    </svg>
-  );
-}
-
-function PuzzleIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925-.247-.665-.89-1.166-1.653-1.166-.966 0-1.75.79-1.75 1.75 0 .422-.18.79-.483 1.064a1.478 1.478 0 0 1-1.064.436H12.05c-.79 0-1.426-.636-1.426-1.426 0-.874-.72-1.614-1.594-1.614-.966 0-1.75.784-1.75 1.75 0 .315-.107.604-.288.834-.18.229-.432.395-.721.474a1.425 1.425 0 0 1-1.022-.12l-1.611-1.611A2.41 2.41 0 0 1 2.93 12.93c0-.617.236-1.234.706-1.704L5.15 9.712c.23-.23.338-.556.29-.878-.07-.47-.48-.802-.925-.968a1.79 1.79 0 0 1-1.166-1.653c0-.966.79-1.75 1.75-1.75.422 0 .79-.18 1.064-.483A1.478 1.478 0 0 1 6.6 2.93h.93c.79 0 1.426.636 1.426 1.426 0 .874.72 1.614 1.594 1.614.966 0 1.75-.784 1.75-1.75 0-.315.107-.604.288-.834.18-.229.432-.395.721-.474a1.425 1.425 0 0 1 1.022.12l1.611 1.611c.939.939.939 2.47 0 3.408l-1.568 1.568c-.23.23-.338.556-.289.878.07.47.48.802.925.968a1.79 1.79 0 0 1 1.166 1.653c0 .966-.79 1.75-1.75 1.75-.422 0-.79.18-1.064.483a1.478 1.478 0 0 1-.436 1.064v.93c0 .79-.636 1.426-1.426 1.426-.874 0-1.614-.72-1.614-1.594 0-.966-.784-1.75-1.75-1.75-.315 0-.604.107-.834.288-.229.18-.395.432-.474.721a1.425 1.425 0 0 1-.12 1.022" />
-    </svg>
-  );
-}
-
-function BotIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M12 8V4H8" />
-      <rect width="16" height="12" x="4" y="8" rx="2" />
-      <path d="M2 14h2" />
-      <path d="M20 14h2" />
-      <path d="M15 13v2" />
-      <path d="M9 13v2" />
-    </svg>
-  );
-}
-
-function BlocksIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect width="7" height="7" x="14" y="3" rx="1" />
-      <path d="M10 21V8a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H3" />
-    </svg>
-  );
-}
-
-function MonitorIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect x="3" y="4" width="18" height="12" rx="2" />
-      <path d="M8 20h8" />
-      <path d="M12 16v4" />
-    </svg>
+    </Section>
   );
 }

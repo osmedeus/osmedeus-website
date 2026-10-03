@@ -1,4 +1,3 @@
-
 # workflow.yaml - Osmedeus Workflow Example
 kind: module
 name: demo-docker

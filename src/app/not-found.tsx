@@ -1,31 +1,25 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { DOCS_URL } from "@/lib/links";
 
 export default function NotFound() {
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-6 text-center">
-      <p className="text-sm text-[var(--muted)]">404</p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-[var(--foreground)] sm:text-4xl">
+      <p className="font-mono text-[11px] tracking-[0.08em] text-[var(--text-3)]">
+        404
+      </p>
+      <h1 className="mt-3 text-3xl font-semibold text-[var(--text-1)] sm:text-4xl">
         Page not found
       </h1>
-      <p className="mt-4 text-base text-[var(--muted)]">
+      <p className="mt-4 text-[15px] text-[var(--text-2)]">
         The page you’re looking for doesn’t exist.
       </p>
       <div className="mt-8 flex items-center gap-3">
-        <Button asChild variant="movingBorder" size="lg">
+        <Button asChild size="lg">
           <Link href="/">Back to home</Link>
         </Button>
-        <Button
-          asChild
-          variant="outline"
-          size="lg"
-          className="border-blue-400/40 bg-blue-500/15 text-blue-100 hover:border-blue-400/60 hover:bg-blue-500/25 hover:text-white"
-        >
-          <a
-            href="https://docs.osmedeus.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+        <Button asChild variant="outline" size="lg">
+          <a href={DOCS_URL} target="_blank" rel="noopener noreferrer">
             Documentation
           </a>
         </Button>

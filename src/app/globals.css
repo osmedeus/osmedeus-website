@@ -1,117 +1,263 @@
 @import "tailwindcss";
 
-/* Custom theme configuration */
+/* ═══════════════════════════════════════════════════════════════════════════
+ * THEME — structure, not atmosphere.
+ *
+ * One neutral ladder and ONE accent dial. Every other colour on the page is a
+ * `color-mix` off those, so a palette change stays a single edit. Nothing here
+ * glows, blurs or gradients: depth is carried by 1px rules and corner brackets.
+ * (One exception, on hover only: the logo, sponsor and install-box halos.)
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
 @theme {
-  /* Dark theme colors */
-  --color-background: #0b0b0f;
-  --color-surface: #111118;
-  --color-surface-2: #151522;
-  --color-border: rgba(255, 255, 255, 0.10);
-  --color-text: #f5f5f7;
-  --color-muted: rgba(245, 245, 247, 0.70);
-  --color-accent: rgba(255, 255, 255, 0.92);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, Consolas,
+    "Liberation Mono", monospace;
+  /*
+   * The install line only. Not JetBrains Mono: that face is the page's label
+   * voice, and the command should read as a thing copied out of a terminal.
+   * The platform's own terminal face is literally that — SF Mono on macOS,
+   * Consolas on Windows — and costs nothing to load.
+   */
+  --font-terminal: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
+    Consolas, "Liberation Mono", monospace;
 
-  /* Light theme colors */
-  --color-background-light: #fafafa;
-  --color-surface-light: #ffffff;
-  --color-surface-2-light: #f5f5f5;
-  --color-border-light: rgba(0, 0, 0, 0.08);
-  --color-text-light: #0b0b0f;
-  --color-muted-light: rgba(11, 11, 15, 0.65);
-  --color-accent-light: rgba(0, 0, 0, 0.90);
+  --radius: 2px;
 
-  /* Terminal (Dracula) palette */
-  --color-terminal-bg: #282a36;
-  --color-terminal-surface: #343746;
-  --color-terminal-border: #44475a;
-  --color-terminal-text: #f8f8f2;
-  --color-terminal-muted: #6272a4;
-  --color-terminal-green: #50fa7b;
-  --color-terminal-purple: #bd93f9;
-  --color-terminal-cyan: #8be9fd;
-  --color-terminal-yellow: #f1fa8c;
-  --color-terminal-pink: #ff79c6;
-  --color-terminal-orange: #ffb86c;
-
-  /* Glow effects */
-  --shadow-glow: 0 0 24px rgba(255, 255, 255, 0.10);
-  --shadow-glow-strong: 0 0 40px rgba(255, 255, 255, 0.15);
-
-  /* Animation durations */
-  --duration-fast: 0.2s;
-  --duration-normal: 0.3s;
-  --duration-slow: 0.5s;
-
-  /* Font family */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --container-frame: 1120px;
+  --container-prose: 680px;
 }
 
-/* CSS variables for theme switching */
+/*
+ * ── the ladder: Phosphor Archive, de-greened ground (dark, the default) ───
+ *
+ * Both themes are the user's own Ghostty schemes, read straight out of
+ * ~/.config/ghostty/themes. Every value below is either a literal from that
+ * file — labelled with the key it came from — or a `color-mix` between two of
+ * them, with one documented exception: the ground and the type are the scheme's
+ * own literals with their CHROMA scaled down, each annotated with the factor.
+ * Phosphor Archive is a green-phosphor scheme and reading the whole page
+ * through that wash was too much — so the green was pulled back to the places
+ * it does a job. Lightness and hue are never touched, only chroma.
+ */
 :root {
-  --background: var(--color-background);
-  --surface: var(--color-surface);
-  --surface-2: var(--color-surface-2);
-  --border: var(--color-border);
-  --foreground: var(--color-text);
-  --muted: var(--color-muted);
-  --accent: var(--color-accent);
-  --brand-primary-rgb: 99 102 241;
+  color-scheme: dark;
 
-  /* Shadcn compatible variables */
-  --radius: 0.5rem;
-  --primary: var(--color-text);
-  --primary-foreground: var(--color-background);
-  --secondary: var(--color-surface-2);
-  --secondary-foreground: var(--color-text);
-  --muted-foreground: var(--color-muted);
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --ring: var(--color-accent);
-  --card: var(--color-surface);
-  --card-foreground: var(--color-text);
-  --popover: var(--color-surface);
-  --popover-foreground: var(--color-text);
-  --input: var(--color-border);
+  /*
+   * ── the ground, de-greened ───────────────────────────────────────────────
+   *
+   * The only departure from the scheme file, and a deliberate one. Phosphor
+   * Archive's own ground is a green-tinted black and it washes the whole page
+   * — the hairline grid reads as green rather than as structure.
+   *
+   * Each of the three was taken into OKLCh and had its CHROMA scaled to 30%
+   * with its lightness and hue untouched, so the tint comes out and nothing
+   * gets lighter or darker: every contrast ratio on this page is within 0.08
+   * of the raw scheme's, and raised still sits 2.23x off bg (raw: 2.20x). The
+   * recipe, to retune or revert — `oklch(from <literal> l calc(c * F) h)`,
+   * F=0.3 here, F=1 for the scheme verbatim, F=0 for a dead-neutral ground.
+   * Baked to hex rather than left as relative-colour CSS so that an engine
+   * without `oklch(from ...)` cannot fail it into an unset background.
+   *
+   * It is arguably the more faithful phosphor, too: a CRT glows green because
+   * the phosphor is LIT, and the unlit screen is just dark. The green here
+   * stays entirely in the light — text, accent, marker, syntax, all raw.
+   */
+  --bg: #131513; /* background #101710, chroma × 0.3 */
+  --raised: #20231f; /* palette 0 #1a2618, chroma × 0.3 */
+  --line: #292f28; /* selection-background #1e331c, chroma × 0.3 */
+
+  --surface: color-mix(in oklab, var(--raised) 70%, var(--bg));
+  --inset: color-mix(in oklab, var(--bg) 92%, #000);
+  --line-2: color-mix(in oklab, var(--text-4) 45%, var(--line)); /* palette 8 → line */
+
+  /*
+   * ── the type, de-greened ─────────────────────────────────────────────────
+   *
+   * Same treatment as the ground, and for the same reason: the scheme's
+   * foreground carries a chroma of 0.0715, FOURTEEN times the ground's, so
+   * once the background went neutral the type was what still read green — and
+   * it is the largest area of colour on the page. Headline, body, nav and
+   * labels all come off these two rungs.
+   *
+   * Scaled harder than the ground (0.15 vs 0.3) because it covers more of the
+   * page: just enough hue left to sit with the accent rather than look like a
+   * different palette. Lightness and hue held as before, so the ladder keeps
+   * its contrast — text-1 lands at 8.80:1 on the ground, from 9.01:1 raw.
+   *
+   * The green now lives ONLY where it is doing a job: the accent, the marker,
+   * the eyebrow dots and the syntax register, all still raw below.
+   */
+  --text-1: #b0b5af; /* foreground #9dbf93, chroma × 0.15 */
+  --text-2: color-mix(in oklab, var(--text-1) 72%, var(--text-4));
+  --text-3: color-mix(in oklab, var(--text-1) 50%, var(--text-4));
+  --text-4: #636563; /* palette 8 #5f675d, chroma × 0.15 */
+
+  /*
+   * Selection keeps the scheme's RAW green pair while `--line` above is the
+   * de-greened form of the same literal. Deliberate: the grid is chrome and
+   * wants to recede, but a selection is a functional, transient highlight and
+   * should look like the one in their terminal.
+   */
+  --select-bg: #1e331c; /* selection-background, raw */
+  --select-fg: #9dbf93; /* selection-foreground */
+
+  /*
+   * The one dial, and in both schemes it is that palette's own green. `fg` is
+   * for text and rules, `fill` for solid surfaces: Phosphor Archive's green is
+   * already light enough to carry both (9.7:1 on the de-greened ground, up
+   * from 9.6:1 on the raw one), so dark leaves them at the raw hue.
+   */
+  --accent: #71d25b; /* palette 2 */
+  --accent-fg: var(--accent);
+  --accent-fill: var(--accent);
+  --accent-ink: var(--bg); /* ink laid on the fill */
+  --accent-soft: color-mix(in oklab, var(--accent) 22%, var(--surface));
+  --accent-line: color-mix(in oklab, var(--accent) 45%, var(--line));
+
+  /*
+   * The logo's hover halo. The SAME two literals in both themes, on purpose:
+   * the mark doesn't change with the theme, so neither does its light — the
+   * light scheme's darker ANSI pair turned it into a brown smudge on cream,
+   * and a monochrome scheme has no second hue to build a halo out of at all.
+   * These are the only two hexes on the page that belong to neither scheme.
+   */
+  --glow-logo: color-mix(in oklab, #67d5d3 35%, #a58aed);
+
+  /*
+   * The alarm, and it is the ONLY thing on the page that is not green or grey:
+   * Phosphor Archive is a monochrome phosphor palette whose ANSI 1 is a warm
+   * tan rather than a red. It reads as amber-warning more than danger, which
+   * is as close to danger as this scheme goes. It does at least now sit on a
+   * neutral ground rather than a green one, which helps it read as a warning.
+   */
+  --destructive: #c99d6b; /* palette 1 */
+
+  /* The headline marker is each scheme's own yellow, always under dark ink. */
+  --highlight: #cae69a; /* palette 11 */
+  --highlight-ink: var(--bg);
+
+  /*
+   * Syntax register. Greys come off the ladder; the roles where colour carries
+   * meaning in YAML take the scheme's own ANSI hues, so a block of config on
+   * the page reads the way it reads in their terminal.
+   *
+   * Phosphor Archive is monochrome, so "the way it reads in their terminal" is
+   * five shades of green — the cyan, blue and magenta slots are all greens
+   * here. Kept faithful, and the neutral ground above now gives them more hue
+   * contrast than the green one did. num/bool (palettes 3 and 5) stay the one
+   * pair close enough to blur; if they ever need separating, walk `bool`
+   * toward `--text-2` rather than invent a hue this palette does not contain.
+   */
+  --syntax-plain: var(--text-2);
+  --syntax-key: #7cdbb4; /* palette 6 · cyan slot → mint */
+  --syntax-str: var(--accent-fg);
+  --syntax-num: #b3db6e; /* palette 3 · yellow slot → yellow-green */
+  --syntax-bool: #9fcb7e; /* palette 5 · magenta slot → yellow-green */
+  --syntax-comment: var(--text-4);
+  --syntax-punct: var(--text-3);
+  --syntax-var: #6ab885; /* palette 4 · blue slot → green-teal */
+
+  /*
+   * ── the figures' register, DERIVED from the ladder above ────────────────
+   *
+   * Every drawing on this page comes from the reference catalogue, and a
+   * catalogue figure strokes and fills itself from `--og-*` inline. Those
+   * names are published here rather than re-keyed into each figure, for two
+   * reasons: a figure lifted out of the catalogue needs no edit and so cannot
+   * drift from it, and the palette stays the ONE above.
+   *
+   * An adapter and nothing else — not one hex is stated in it, which is what
+   * keeps a palette change to a single edit, and what makes both themes
+   * follow for free.
+   */
+  --og-page-bg: var(--bg);
+  --og-surface: var(--surface);
+  --og-surface-raised: var(--raised);
+  --og-surface-sunken: var(--inset);
+  --og-border: var(--line);
+  --og-border-subtle: color-mix(in oklab, var(--line) 55%, var(--surface));
+  --og-border-strong: var(--line-2);
+  --og-rule: var(--line);
+  --og-track: var(--inset);
+  --og-text: var(--text-1);
+  --og-text-body: var(--text-2);
+  --og-text-muted: var(--text-3);
+  --og-text-faint: var(--text-4);
+  --og-accent: var(--accent-fill);
+  --og-accent-fg: var(--accent-fg);
+  --og-accent-contrast: var(--accent-ink);
+  --og-accent-soft-bg: var(--accent-soft);
+  --og-accent-soft-fg: var(--accent-fg);
+  --og-positive: var(--accent-fg);
+  --og-positive-soft-bg: var(--accent-soft);
+  --og-negative: var(--destructive);
+  --og-negative-soft-bg: color-mix(in oklab, var(--destructive) 18%, var(--surface));
+  --og-neutral-soft-bg: var(--inset);
+  --og-neutral-soft-fg: var(--text-2);
+  --og-font-mono: var(--font-mono);
+
+  /* 8px L-brackets, painted through a mask. One definition, four corners. */
+  --cx-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8' fill='none'%3E%3Cpath d='M8 0V1H1V8H0V0H8Z' fill='black'/%3E%3C/svg%3E");
+  --cx-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8' fill='none'%3E%3Cpath d='M0 0V1H7V8H8V0H0Z' fill='black'/%3E%3C/svg%3E");
+  --cx-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8' fill='none'%3E%3Cpath d='M8 8V7H1V0H0V8H8Z' fill='black'/%3E%3C/svg%3E");
+  --cx-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8' fill='none'%3E%3Cpath d='M0 8V7H7V0H8V8H0Z' fill='black'/%3E%3C/svg%3E");
+
+  /* The focus ring every control draws. */
+  --ring: var(--accent-fg);
 }
 
-[data-theme="light"],
-.light {
-  --background: var(--color-background-light);
-  --surface: var(--color-surface-light);
-  --surface-2: var(--color-surface-2-light);
-  --border: var(--color-border-light);
-  --foreground: var(--color-text-light);
-  --muted: var(--color-muted-light);
-  --accent: var(--color-accent-light);
-  --brand-primary-rgb: 79 70 229;
+/* ── the ladder: Buttercream Diner (light) ────────────────────────────────── */
+[data-theme="light"] {
+  color-scheme: light;
 
-  --color-terminal-bg: #f2f4ff;
-  --color-terminal-surface: #e7eaff;
-  --color-terminal-border: rgba(11, 11, 15, 0.12);
-  --color-terminal-text: #0b0b0f;
-  --color-terminal-muted: rgba(11, 11, 15, 0.60);
-  --color-terminal-green: #047857;
-  --color-terminal-purple: #6d28d9;
-  --color-terminal-cyan: #0369a1;
-  --color-terminal-yellow: #a16207;
-  --color-terminal-pink: #be185d;
-  --color-terminal-orange: #c2410c;
+  --bg: #fff9eb; /* background */
+  --surface: color-mix(in oklab, #e4d6b0 28%, #fff9eb); /* → palette 7 */
+  --raised: #ffffff; /* palette 15 */
+  --inset: color-mix(in oklab, #e4d6b0 48%, #fff9eb);
 
-  --primary: var(--color-text-light);
-  --primary-foreground: var(--color-background-light);
-  --secondary: var(--color-surface-2-light);
-  --secondary-foreground: var(--color-text-light);
-  --muted-foreground: var(--color-muted-light);
-  --card: var(--color-surface-light);
-  --card-foreground: var(--color-text-light);
-  --popover: var(--color-surface-light);
-  --popover-foreground: var(--color-text-light);
-  --input: var(--color-border-light);
+  --line: #e4d6b0; /* palette 7 */
+  --line-2: color-mix(in oklab, #89837c 45%, #e4d6b0); /* palette 8 → line */
+
+  --text-1: #4a4237; /* foreground */
+  --text-2: color-mix(in oklab, #4a4237 76%, #89837c);
+  --text-3: #89837c; /* palette 8 */
+  --text-4: color-mix(in oklab, #89837c 58%, #fff9eb);
+
+  --select-bg: #eee0b3; /* selection-background */
+  --select-fg: #4a4237; /* selection-foreground */
+
+  /*
+   * This scheme's own green, and it is a dark one, so the two forms part
+   * company: the text form is walked further toward the ink to clear 4.5:1 on
+   * cream, and the fill carries pale ink rather than dark.
+   */
+  --accent: #658845; /* palette 2 */
+  --accent-fg: color-mix(in oklab, var(--accent) 72%, var(--text-1));
+  --accent-fill: color-mix(in oklab, var(--accent) 88%, var(--text-1));
+  --accent-ink: #fff9eb; /* background */
+  --accent-soft: color-mix(in oklab, var(--accent) 16%, var(--surface));
+
+  --destructive: #b44c38; /* palette 1 */
+
+  --highlight: #eee0b3; /* selection-background — the scheme's own marker */
+  --highlight-ink: #4a4237;
+
+  --syntax-key: #4e8379; /* palette 6 · cyan */
+  --syntax-num: #a57e2f; /* palette 3 · yellow */
+  --syntax-bool: #99568c; /* palette 5 · magenta */
+  --syntax-var: #4a72a3; /* palette 4 · blue */
 }
 
-/* Base styles */
-* {
-  border-color: var(--border);
+/* ── base ─────────────────────────────────────────────────────────────────── */
+/*
+ * Every border defaults to the hairline colour, so a bare `border` class is a
+ * hairline. In the base layer so any `border-*` colour utility still wins.
+ */
+@layer base {
+  * {
+    border-color: var(--line);
+  }
 }
 
 html {
@@ -119,93 +265,179 @@ html {
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--text-1);
   font-family: var(--font-sans);
+  font-size: 15px;
   line-height: 1.5;
+  letter-spacing: -0.075px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+h1,
+h2,
+h3 {
+  letter-spacing: -0.03em;
+  text-wrap: balance;
 }
 
-/* Selection color */
+/* Each scheme ships its own selection pair; use it rather than the accent. */
 ::selection {
-  background-color: var(--accent);
-  color: var(--background);
+  background-color: var(--select-bg);
+  color: var(--select-fg);
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
+  background: var(--line-2);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--muted);
+  background: var(--text-4);
 }
 
-/* Aurora animation */
-@keyframes aurora {
-  from {
-    background-position: 50% 50%, 50% 50%;
-  }
-  to {
-    background-position: 350% 50%, 350% 50%;
-  }
+/* ═══ PRIMITIVES ═══════════════════════════════════════════════════════════ */
+
+/*
+ * The page's measure. Rules run full-bleed; everything addressable sits inside
+ * `.frame`, and running prose narrows again to `.prose-measure` so a line of
+ * body copy never exceeds ~75 characters.
+ */
+.frame {
+  width: 100%;
+  max-width: var(--container-frame);
+  margin-inline: auto;
+  padding-inline: 20px;
 }
 
-.animate-aurora {
-  animation: aurora 60s linear infinite;
+.prose-measure {
+  max-width: var(--container-prose);
 }
 
-/* Spotlight animation */
-@keyframes spotlight {
-  0% {
-    opacity: 0;
-    transform: translate(-72%, -62%) scale(0.5);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -40%) scale(1);
-  }
+/*
+ * Section label. Mono, because a label is machine-voice and the headline under
+ * it is not.
+ */
+.eyebrow {
+  /* Block-level, not inline-flex: an inline box sits on its parent's strut,
+     which slipped ~6px of empty line above every label. */
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
 }
 
-.animate-spotlight {
-  animation: spotlight 2s ease 0.75s 1 forwards;
+.eyebrow::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: var(--accent-fg);
+  flex-shrink: 0;
 }
 
-.osmedeus-logo-glow {
-  filter: drop-shadow(
-    0 0 10px rgb(var(--brand-primary-rgb) / 0.35)
+/*
+ * The highlighter. A block of marker ink laid BEHIND the word, with the word
+ * re-coloured to read on it — not a background on the text itself, which would
+ * box the descenders.
+ */
+.hl {
+  position: relative;
+  display: inline-block;
+}
+
+.hl::before {
+  content: "";
+  position: absolute;
+  inset-inline: -0.12em;
+  top: 50%;
+  /*
+   * Tall enough to clear the descenders. The marker is drawn BEHIND dark ink,
+   * so any part of a glyph hanging outside the band would be dark-on-dark and
+   * simply vanish — a clipped `y` is not a stylistic choice.
+   */
+  height: 1.02em;
+  transform: translateY(-50%);
+  background: var(--highlight);
+}
+
+.hl > span {
+  position: relative;
+  color: var(--highlight-ink);
+}
+
+/*
+ * Hover fill. 2px diagonal hatch instead of a glow: it marks the cell without
+ * lighting it, which is the whole difference between this page and the old one.
+ */
+.stripe-hover {
+  --stripe-base: transparent;
+  --stripe-line: color-mix(in oklab, var(--line) 85%, transparent);
+}
+
+.stripe-hover:hover {
+  background: repeating-linear-gradient(
+    315deg,
+    var(--stripe-base),
+    var(--stripe-base) 2px,
+    var(--stripe-line) 4px,
+    var(--stripe-base) 4px
   );
-  transition: filter 200ms;
 }
 
-.osmedeus-logo-glow:hover {
-  filter: drop-shadow(
-    0 0 14px rgb(var(--brand-primary-rgb) / 0.55)
-  );
+/*
+ * Corner brackets. Four 8px masks over one painted box, so the brackets take
+ * the border's colour without four more elements.
+ */
+.cx {
+  position: relative;
 }
+
+.cx::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 10;
+  pointer-events: none;
+  background-color: var(--cx-color, var(--text-4));
+  -webkit-mask-image: var(--cx-tl), var(--cx-bl), var(--cx-br), var(--cx-tr);
+  mask-image: var(--cx-tl), var(--cx-bl), var(--cx-br), var(--cx-tr);
+  -webkit-mask-position: 0 0, 0 100%, 100% 100%, 100% 0;
+  mask-position: 0 0, 0 100%, 100% 100%, 100% 0;
+  -webkit-mask-size: 8px 8px;
+  mask-size: 8px 8px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.cx-flush::before {
+  inset: 0;
+}
+
+.cx-hover::before {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.cx-hover:hover::before {
+  opacity: 1;
+}
+
+/* ═══ MOTION ═══════════════════════════════════════════════════════════════ */
 
 @keyframes marquee {
   from {
@@ -219,4 +451,520 @@ body {
 .animate-marquee {
   animation: marquee 70s linear infinite;
   will-change: transform;
+}
+
+/*
+ * The reveal (see ui/text-generate-effect.tsx). One keyframe, two triggers:
+ * `.reveal-in` plays on first paint, `[data-reveal-state]` is armed and
+ * released by the scroll observer. Only opacity and transform move, so the
+ * whole entrance stays on the compositor.
+ */
+@keyframes reveal {
+  from {
+    opacity: var(--reveal-opacity, 0);
+    transform: var(--reveal-from);
+  }
+}
+
+/*
+ * Rise without the fade, for the headline. Chrome never counts text that first
+ * paints at opacity 0 toward Largest Contentful Paint, and a compositor fade
+ * never repaints it, so a fading <h1> left the page with no LCP at all.
+ */
+[data-fade="false"] { --reveal-opacity: 1; }
+
+.reveal-in,
+[data-reveal] {
+  --reveal-from: translateY(16px);
+}
+
+.reveal-in,
+[data-reveal-state="shown"] {
+  animation: reveal var(--reveal-dur, 0.7s) cubic-bezier(0.25, 0.1, 0.25, 1)
+    var(--reveal-delay, 0s) both;
+}
+
+[data-reveal-state="armed"] {
+  opacity: 0;
+  transform: var(--reveal-from);
+}
+
+/* The header drops in once, on first paint. */
+@keyframes nav-drop {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+.nav-drop {
+  animation: nav-drop 0.3s ease-out both;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.menu-in {
+  animation: menu-in 0.2s ease-out both;
+}
+
+/*
+ * Theme-specific artwork. Both variants ship in the HTML and CSS picks one,
+ * so a themed logo is right on first paint instead of after a client re-render.
+ */
+[data-theme="light"] .only-dark,
+:root:not([data-theme="light"]) .only-light {
+  display: none;
+}
+
+/*
+ * ── Hover glow: the nav's two brand marks and the install box ─────────────
+ *
+ * The page's one exception to "nothing glows", and only on hover. Each halo is
+ * a pseudo-element whose OPACITY is what transitions — the blur and shadow are
+ * painted once, so the fade runs on the compositor instead of repainting a
+ * filter every frame. The logo glows in its own violet, the sponsor button in
+ * the accent green its heart already wears.
+ */
+.logo-glow {
+  position: relative;
+  isolation: isolate;
+}
+
+.logo-glow::before {
+  content: "";
+  position: absolute;
+  inset: -9px;
+  z-index: -1;
+  border-radius: 50%;
+  /* Solid out to the tile's edge (the opaque logo covers the centre anyway),
+     then falling away, so what shows is a ring of light around the mark. */
+  background: radial-gradient(
+    closest-side,
+    var(--glow-logo) 62%,
+    color-mix(in oklab, var(--glow-logo) 40%, transparent) 80%,
+    transparent
+  );
+  filter: blur(5px);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 260ms ease-out,
+    transform 260ms ease-out;
+  pointer-events: none;
+}
+
+.logo-glow > img {
+  transition: transform 260ms ease-out;
+}
+
+a:hover > .logo-glow::before,
+a:focus-visible > .logo-glow::before {
+  opacity: 1;
+  transform: scale(1);
+}
+
+a:hover > .logo-glow > img,
+a:focus-visible > .logo-glow > img {
+  transform: scale(1.06);
+}
+
+/*
+ * The same accent halo, on the sponsor button and on the hero's install box.
+ * The box is many times the button's area, so its halo is spread wider and
+ * kept fainter; its corner brackets turn accent with the border.
+ */
+.cta-glow {
+  --halo:
+    0 0 0 1px var(--accent-line),
+    0 0 18px -2px color-mix(in oklab, var(--accent) 55%, transparent),
+    inset 0 0 12px -4px color-mix(in oklab, var(--accent) 45%, transparent);
+}
+
+.cmd-glow {
+  --halo:
+    0 0 0 1px var(--accent-line),
+    0 0 24px -6px color-mix(in oklab, var(--accent) 45%, transparent),
+    inset 0 0 18px -8px color-mix(in oklab, var(--accent) 35%, transparent);
+}
+
+.cta-glow,
+.cmd-glow {
+  position: relative;
+  transition:
+    border-color 200ms ease-out,
+    color 200ms ease-out;
+}
+
+.cta-glow::after,
+.cmd-glow::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: var(--halo);
+  opacity: 0;
+  transition: opacity 220ms ease-out;
+  pointer-events: none;
+}
+
+.cta-glow:hover,
+.cta-glow:focus-visible,
+.cmd-glow:hover,
+.cmd-glow:focus-visible {
+  --cx-color: var(--accent-line);
+  border-color: var(--accent-line);
+}
+
+.cta-glow:hover::after,
+.cta-glow:focus-visible::after,
+.cmd-glow:hover::after,
+.cmd-glow:focus-visible::after {
+  opacity: 1;
+}
+
+.cta-glow svg {
+  transition:
+    fill 200ms ease-out,
+    transform 200ms ease-out;
+}
+
+.cta-glow:hover svg,
+.cta-glow:focus-visible svg {
+  fill: currentColor;
+  transform: scale(1.12);
+}
+
+/*
+ * THE FIGURE VOCABULARY, taken from the reference catalogue's flat plates.
+ *
+ * Every drawing on this page is one of those figures redrawn with Osmedeus's
+ * own nouns, so the keyframes keep the catalogue's names and timings: a figure
+ * lifted out of it needs no re-key, and two diagrams side by side cannot drift
+ * into different idioms for "travelling", "filling" and "arrived".
+ *
+ * One 6s cycle underneath all of them, scaled per figure by `--spd`.
+ */
+
+/* A connector, marching. */
+@keyframes og-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+/* A unit of work leaving a queue for the lane it was given. */
+@keyframes og-task {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  3%,
+  8% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  20%,
+  76% {
+    transform: translate(var(--tx), var(--ty));
+    opacity: 1;
+  }
+  82%,
+  100% {
+    transform: translate(var(--tx), var(--ty));
+    opacity: 0;
+  }
+}
+
+/* Out to a worker, then back into the result. Fan-out and fan-in, one mark. */
+@keyframes og-shard {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  3%,
+  8% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+  22%,
+  56% {
+    transform: translate(var(--wx), var(--wy));
+    opacity: 1;
+  }
+  72%,
+  88% {
+    transform: translate(var(--rx), 0);
+    opacity: 1;
+  }
+  94%,
+  100% {
+    transform: translate(var(--rx), 0);
+    opacity: 0;
+  }
+}
+
+/* A bar filling on its own clock. */
+@keyframes og-progress {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  70%,
+  85% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  95%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* The same, but only after its lane has been handed something. */
+@keyframes og-work {
+  0%,
+  22% {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+  23% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+  62%,
+  76% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  82%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0;
+  }
+}
+
+/* A lane's status light: idle, working, done. */
+@keyframes og-wdot {
+  0%,
+  22% {
+    fill: var(--og-text-faint);
+  }
+  24%,
+  61% {
+    fill: var(--og-accent);
+  }
+  63%,
+  76% {
+    fill: var(--og-positive);
+  }
+  82%,
+  100% {
+    fill: var(--og-text-faint);
+  }
+}
+
+/*
+ * Everything falling into one funnel. `--dx` is each source's own horizontal
+ * distance to the neck, so one keyframe serves every lane whatever the spacing.
+ */
+@keyframes og-funnel {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  8% {
+    opacity: 1;
+  }
+  55% {
+    transform: translate(var(--dx), 80px);
+  }
+  92% {
+    transform: translate(var(--dx), 138px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--dx), 138px);
+    opacity: 0;
+  }
+}
+
+/* A line arriving in a list. */
+@keyframes og-row {
+  0% {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  5% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  82% {
+    opacity: 1;
+  }
+  88%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* A value typing itself in. */
+@keyframes og-type {
+  0%,
+  25% {
+    transform: scaleX(0);
+  }
+  45%,
+  80% {
+    transform: scaleX(1);
+  }
+  90%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+/* The reading head, running down a file. */
+@keyframes og-caret {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  66% {
+    transform: translateY(var(--caret-to, 112px));
+    opacity: 1;
+  }
+  72%,
+  100% {
+    transform: translateY(var(--caret-to, 112px));
+    opacity: 0;
+  }
+}
+
+/* What the reading head found, called out beside the line. */
+@keyframes og-flagline {
+  0%,
+  38% {
+    opacity: 0;
+  }
+  42%,
+  88% {
+    opacity: 1;
+  }
+  94%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* The result, once there is one. */
+@keyframes og-result {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  46%,
+  84% {
+    opacity: 1;
+  }
+  90%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* A label that lands last, after the thing it names. */
+@keyframes og-label {
+  0%,
+  70% {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  74%,
+  88% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  94%,
+  100% {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
+
+@keyframes og-blink {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/*
+ * `--spd` scales every duration in a figure (each one writes
+ * `calc(Ns * var(--spd, 1))`), so the page has one tempo knob and the figures
+ * keep their RELATIVE timings — a bar that fills before its task arrives is a
+ * broken drawing.
+ */
+.fig {
+  --spd: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-mono);
+  overflow: visible;
+}
+
+/*
+ * Bars scale from their own left edge rather than the viewBox origin. The
+ * catalogue sets `transform-origin` per bar in view-box coordinates; this is
+ * the same thing said once, for bars that start where they are drawn.
+ */
+.fig .tb {
+  transform-box: fill-box;
+  transform-origin: left;
+}
+
+/*
+ * The motion contract, and the `!important` is load-bearing: figures declare
+ * their animation with the inline shorthand, which resets play-state to
+ * running and outranks any non-important rule. Only the figure on screen
+ * moves, and it PAUSES rather than resets, so scrolling back resumes the story
+ * instead of restarting it.
+ */
+.fig * {
+  animation-play-state: paused !important;
+}
+
+.is-playing .fig * {
+  animation-play-state: running !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /*
+   * Figures drop their animations ENTIRELY rather than freezing at 0.01ms —
+   * frame zero of `og-progress` is an empty bar and frame zero of `og-row` an
+   * invisible row, so a frozen figure would read as a half-drawn one. With no
+   * animation each element falls back to its own attributes: bars full, rows
+   * present, dashes still. A complete drawing, holding still.
+   */
+  .fig,
+  .fig * {
+    animation: none !important;
+  }
 }

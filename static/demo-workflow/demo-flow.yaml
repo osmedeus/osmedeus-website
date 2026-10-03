@@ -1,4 +1,3 @@
-
 # workflow.yaml - Osmedeus Workflow Example
 kind: flow
 name: demo-flow

@@ -5,9 +5,9 @@
 ## Architecture
 
 This is the landing page for Osmedeus, a security orchestration engine. Built with:
-- **Next.js 15** with App Router (src/app/)
+- **Next.js 16** with App Router (src/app/)
 - **Tailwind CSS 4** with PostCSS
-- **Framer Motion** for animations
+- **CSS animations** for motion (no animation library; see `src/components/ui/text-generate-effect.tsx`)
 - **next-themes** for dark/light mode (dark is default)
 
 ## Commands

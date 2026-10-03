@@ -1,24 +1,13 @@
-"use client";
-
-import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
-import { motion } from "framer-motion";
-import { Star } from "lucide-react";
-import Image from "next/image";
-import { useTheme } from "next-themes";
-import { Button } from "@/components/ui/button";
-import { MovingBorder } from "@/components/ui/moving-border";
-import { Spotlight } from "@/components/ui/spotlight";
 import { FadeIn } from "@/components/ui/text-generate-effect";
-import { GradientBackground } from "@/components/ui/aurora-background";
-import { useGithubStars } from "@/lib/use-github-stars";
-
-const defaultInstallBaseUrl = "https://osmedeus-website.vercel.app";
+import { InstallCta } from "@/components/sections/install-cta";
+import { ReleaseChipText } from "@/components/sections/release-chip";
+import { cn } from "@/lib/utils";
 
 const trustedCompanies = [
   {
     name: "U.S. Dept Of Defense",
     href: "https://www.defense.gov/",
-    logo: "/brands/us-dod.svg",
+    logo: "/brands/us-dod.webp", // 11 KB raster of a 340 KB vector seal
   },
   {
     name: "Dell",
@@ -109,391 +98,121 @@ const trustedCompanies = [
   },
 ];
 
-export function Hero({
-  installBaseUrl = defaultInstallBaseUrl,
-}: {
-  installBaseUrl?: string;
-}) {
-  const [copied, setCopied] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [version, setVersion] = useState("v5.0");
-  const stars = useGithubStars();
-  const { resolvedTheme } = useTheme();
-
-  useEffect(() => {
-    const id = requestAnimationFrame(() => setMounted(true));
-    return () => cancelAnimationFrame(id);
-  }, []);
-
-  useEffect(() => {
-    fetch("https://api.github.com/repos/j3ssie/osmedeus/releases/latest")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data?.tag_name) setVersion(data.tag_name);
-      })
-      .catch(() => {});
-  }, []);
-
-  const installCommand = useMemo(() => {
-    return `curl -fsSL ${installBaseUrl}/install.sh | bash`;
-  }, [installBaseUrl]);
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(installCommand);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleCopyKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      void handleCopy();
-    }
-  };
-
+export function Hero() {
   return (
-    <GradientBackground className="relative min-h-screen overflow-hidden bg-[var(--background)]">
-      {/* Spotlight effect */}
-      <Spotlight
-        className="-top-40 left-0 md:-top-20 md:left-60"
-        fill="rgba(255, 255, 255, 0.5)"
-      />
-
-      {/* Grid pattern */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, var(--foreground) 1px, transparent 1px),
-            linear-gradient(to bottom, var(--foreground) 1px, transparent 1px)
-          `,
-          backgroundSize: "80px 80px",
-        }}
-      />
-
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-4 pt-2 sm:px-6 lg:px-8">
-        {/* Badge */}
+    <section className="relative overflow-hidden border-b bg-[var(--bg)]">
+      <div className="frame flex flex-col items-center pt-32 pb-16 sm:pt-36">
+        {/* Release chip. A square mono tag, not a pill: the page has no pills. */}
         <FadeIn delay={0} duration={0.5}>
-          <div className="mb-6 flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)]/50 px-4 py-1.5 backdrop-blur-sm">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+          <div className="mb-8 flex items-center gap-2.5 border bg-[var(--surface)] px-3 py-1.5">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full animate-ping bg-[var(--accent-fg)] opacity-75" />
+              <span className="relative inline-flex h-1.5 w-1.5 bg-[var(--accent-fg)]" />
             </span>
-            <span className="text-sm text-[var(--muted)]">
-              <span className="block sm:hidden">
-                {version} - with Next-Level Performance &amp; Power
-              </span>
-              <span className="hidden sm:inline">
-                {version} Released – Cleaner, More Flexible Architecture and Next Level
-                Power
-              </span>
-            </span>
+            <ReleaseChipText />
           </div>
         </FadeIn>
 
-        {/* Headline */}
-        <FadeIn delay={0.1} duration={0.5}>
-          <h1 className="max-w-4xl text-center text-4xl font-semibold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="text-[var(--foreground)]">Modern Orchestration</span>
+        {/* Headline. Rises but never fades: it is the LCP element. */}
+        <FadeIn delay={0.08} duration={0.5} fade={false}>
+          <h1 className="max-w-4xl text-center text-4xl font-semibold sm:text-5xl md:text-6xl">
+            <span className="text-[var(--text-1)]">Modern Orchestration</span>
             <br />
-            <span className="bg-gradient-to-r from-[var(--foreground)] via-[var(--muted)] to-[var(--foreground)] bg-clip-text text-transparent">
-              Engine for Security
+            <span className="text-[var(--text-1)]">
+              Engine for{" "}
+              <span className="hl">
+                <span>Security</span>
+              </span>
             </span>
           </h1>
         </FadeIn>
 
         {/* Tagline */}
-        <FadeIn delay={0.2} duration={0.5}>
-          <div className="mt-6 flex w-full flex-col items-center">
-            <p className="max-w-2xl text-center text-lg text-[var(--muted)] sm:text-xl">
-              Automate your security workflows with declarative YAML.
-              <br className="hidden sm:block" />
-              From reconnaissance to vulnerability scanning, all in one place.
-            </p>
+        <FadeIn delay={0.16} duration={0.5}>
+          <p className="prose-measure mt-6 text-center text-[15px] leading-[150%] text-[var(--text-2)] sm:text-base">
+            Automate your security workflows with declarative YAML.{" "}
+            <br className="hidden sm:block" />
+            From reconnaissance to vulnerability scanning, all in one place.
+          </p>
+        </FadeIn>
 
-			<div className="mt-6 hidden w-full max-w-3xl px-2 sm:block lg:max-w-4xl">
-              <MovingBorder
-                as="div"
-                rx="16px"
-                ry="16px"
-                containerClassName="w-full"
-                className="bg-[color:var(--color-terminal-bg)] backdrop-blur-md"
-                borderClassName="stroke-[rgba(255,255,255,0.35)]"
-              >
-                <div className="overflow-hidden rounded-[15px]">
-                  <div
-                    className="flex cursor-pointer flex-wrap items-center gap-3 px-4 py-3"
-                    role="button"
-                    tabIndex={0}
-                    onClick={handleCopy}
-                    onKeyDown={handleCopyKeyDown}
-                    aria-label="Copy install command"
+        {/* The ask, in the first screen: install, source, docs. */}
+        <FadeIn delay={0.24} duration={0.5} className="w-full">
+          <div className="mt-8 flex w-full justify-center">
+            <InstallCta />
+          </div>
+        </FadeIn>
+
+        {/* Trusted by */}
+        <FadeIn delay={0.32} duration={0.5} className="w-full">
+          <div className="mt-14 flex flex-col items-center gap-6">
+            <p className="px-4 text-center font-mono text-[11px] uppercase tracking-[0.06em] text-[var(--text-3)]">
+              Finding real vulnerabilities at Fortune 500 companies
+            </p>
+            <div className="group relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+              <div className="flex w-max items-center gap-x-16 py-2 pr-16 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
+                {[...trustedCompanies, ...trustedCompanies].map((company, index) => (
+                  <a
+                    key={`${company.name}-${index}`}
+                    href={company.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-44 items-center justify-center opacity-60 grayscale transition-all duration-200 hover:opacity-100 hover:grayscale-0"
+                    aria-label={company.name}
                   >
-                    <code
-                      className="min-w-0 flex-1 break-words text-center font-mono text-xs leading-relaxed text-[color:var(--color-terminal-text)] sm:text-sm"
-                      suppressHydrationWarning
-                    >
-                      <span style={{ color: "var(--color-terminal-muted)" }}>
-                        $&nbsp;
-                      </span>
-                      {highlightBashCommand(installCommand)}
-                    </code>
-
-                    <span className="ml-auto shrink-0">
-                      {copied ? (
-                        <span className="inline-flex items-center rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-text)] sm:text-sm">
-                          <CheckIcon className="h-4 w-4" />
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center rounded-md px-2 py-1 text-xs text-[color:var(--color-terminal-muted)] transition-all hover:bg-[color:var(--color-terminal-border)] hover:text-[color:var(--color-terminal-text)] hover:shadow-[0_0_12px_rgba(255,255,255,0.05)] sm:text-sm">
-                          <CopyIcon className="h-4 w-4" />
-                        </span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              </MovingBorder>
-            </div>
-          </div>
-        </FadeIn>
-
-        {/* CTAs */}
-        <FadeIn delay={0.3} duration={0.5}>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <a
-              href="https://github.com/j3ssie/osmedeus"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                variant="movingBorder"
-                size="lg"
-                className="w-[200px] justify-center"
-              >
-                <GithubIcon className="mr-2 h-4 w-4" />
-                GitHub
-                <span className="ml-2 inline-flex items-center gap-1" suppressHydrationWarning>
-                  <span className="font-bold">{stars}</span>
-                  <Star className="!h-3 !w-3 fill-current" />
-                </span>
-              </Button>
-            </a>
-            <a
-              href="https://docs.osmedeus.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button
-                variant="movingBorder"
-                size="lg"
-                className="w-[200px] justify-center bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-white"
-              >
-                <BookOpenIcon className="mr-2 h-4 w-4" />
-                Documentation
-              </Button>
-            </a>
-          </div>
-        </FadeIn>
-
-        {/* Trusted By */}
-        <FadeIn delay={0.4} duration={0.5}>
-          <div className="mt-[55px] flex flex-col items-center gap-6">
-            <p className="max-w-[38ch] px-4 text-center text-sm leading-snug tracking-normal text-[var(--muted)] sm:max-w-none sm:px-0 sm:tracking-wider">
-              <span>Proven to identify real security vulnerabilities for Fortune 500</span>
-              <br className="block sm:hidden" />
-              <span>
-                <span className="hidden sm:inline"> </span>
-                companies and many more
-              </span>
-            </p>
-            <div className="group relative w-full max-w-6xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-              <div className="flex w-max items-center gap-x-12 py-2 pr-12 animate-marquee motion-reduce:animate-none group-hover:[animation-play-state:paused]">
-                {[...trustedCompanies, ...trustedCompanies].map((company, index) => {
-                  const theme = mounted ? resolvedTheme : "dark";
-                  const logoSrc =
-                    typeof company.logo === "string"
-                      ? company.logo
-                      : theme === "light"
-                        ? company.logo.light
-                        : company.logo.dark;
-
-                  return (
-                    <a
-                      key={`${company.name}-${index}`}
-                      href={company.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex w-44 items-center justify-center opacity-70 transition-opacity hover:opacity-100"
-                      aria-label={company.name}
-                    >
-                      <Image
-                        src={logoSrc}
-                        alt={company.name}
-                        width={140}
-                        height={32}
-                        className="h-7 w-auto"
-                      />
-                    </a>
-                  );
-                })}
+                    {typeof company.logo === "string" ? (
+                      <BrandLogo src={company.logo} alt={company.name} />
+                    ) : (
+                      // Both variants ship; CSS shows the one for the theme, so
+                      // there is no post-hydration swap of the whole marquee.
+                      <>
+                        <BrandLogo
+                          src={company.logo.dark}
+                          alt={company.name}
+                          className="only-dark"
+                        />
+                        <BrandLogo
+                          src={company.logo.light}
+                          alt={company.name}
+                          className="only-light"
+                        />
+                      </>
+                    )}
+                  </a>
+                ))}
               </div>
             </div>
           </div>
         </FadeIn>
-
-        {/* Scroll indicator */}
-        <FadeIn delay={0.5} duration={0.5} className="absolute bottom-8">
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center gap-2"
-          >
-            <span className="text-xs text-[var(--muted)]">Scroll to explore</span>
-            <ChevronDownIcon className="h-4 w-4 text-[var(--muted)]" />
-          </motion.div>
-        </FadeIn>
       </div>
-    </GradientBackground>
+    </section>
   );
 }
 
-function GithubIcon({ className }: { className?: string }) {
+/*
+ * A plain <img>, not next/image: images ship unoptimized (next.config.ts), so
+ * <Image> would render this same tag but as a client component, and the
+ * marquee would hydrate 38 of them for nothing.
+ */
+function BrandLogo({
+  src,
+  alt,
+  className,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+}) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-    </svg>
-  );
-}
-
-function BookOpenIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M12 7v14" />
-      <path d="M3 18a2 2 0 0 0 2 2h7" />
-      <path d="M21 18a2 2 0 0 1-2 2h-7" />
-      <path d="M5 4h6a2 2 0 0 1 2 2v1H5a2 2 0 0 0-2 2v9" />
-      <path d="M19 4h-6a2 2 0 0 0-2 2v1h8a2 2 0 0 1 2 2v9" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  );
-}
-
-function highlightBashCommand(command: string) {
-  const urlMatch = command.match(/https?:\/\/\S+/);
-  const url = urlMatch?.[0] ?? "";
-
-  const [beforeUrl, afterUrl = ""] = url
-    ? command.split(url)
-    : [command, ""];
-
-  const beforeTokens = beforeUrl.trim().split(/\s+/).filter(Boolean);
-  const afterTokens = afterUrl.trim().split(/\s+/).filter(Boolean);
-
-  return (
-    <>
-      {beforeTokens.map((t, i) => {
-        const isFirst = i === 0;
-        const color = isFirst
-          ? "var(--color-terminal-cyan)"
-          : t.startsWith("-")
-            ? "var(--color-terminal-orange)"
-            : "var(--color-terminal-text)";
-        return (
-          <span key={`b-${i}`}>
-            {i > 0 ? " " : ""}
-            <span style={{ color }}>{t}</span>
-          </span>
-        );
-      })}
-      {url && (
-        <>
-          {beforeTokens.length > 0 ? " " : ""}
-          <span style={{ color: "var(--color-terminal-green)" }}>{url}</span>
-        </>
-      )}
-      {afterTokens.map((t, i) => {
-        const isPipe = t === "|";
-        const color = isPipe
-          ? "var(--color-terminal-pink)"
-          : t === "bash"
-            ? "var(--color-terminal-cyan)"
-            : "var(--color-terminal-text)";
-        return (
-          <span key={`a-${i}`}>
-            {" "}
-            <span style={{ color }}>{t}</span>
-          </span>
-        );
-      })}
-    </>
-  );
-}
-
-function CopyIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-      <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-    </svg>
-  );
-}
-
-function CheckIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element -- see above
+    <img
+      src={src}
+      alt={alt}
+      width={180}
+      height={44}
+      loading="lazy"
+      decoding="async"
+      className={cn("h-9 w-auto", className)}
+    />
   );
 }

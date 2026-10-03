@@ -22,5 +22,14 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/:path*"],
+  // Only the two IDE-preview requests handled above. A page-path matcher ran
+  // this ahead of every page view on Vercel, so even a static "/" paid for a
+  // function invocation before the CDN could answer.
+  matcher: [
+    "/@vite/client",
+    {
+      source: "/:path*",
+      has: [{ type: "query", key: "ide_webview_request_time" }],
+    },
+  ],
 };

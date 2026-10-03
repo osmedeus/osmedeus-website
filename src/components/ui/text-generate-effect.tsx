@@ -1,180 +1,77 @@
-"use client";
-
-import { useEffect } from "react";
-import { motion, stagger, useAnimate } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-export function TextGenerateEffect({
-  words,
-  className,
-  filter = true,
-  duration = 0.5,
-}: {
-  words: string;
-  className?: string;
-  filter?: boolean;
-  duration?: number;
-}) {
-  const [scope, animate] = useAnimate();
-  const wordsArray = words.split(" ");
+/*
+ * THE REVEAL, and it is the page's only entrance.
+ *
+ * 16px and 0.7s on a quarter-ease: far enough to register as arriving, short
+ * enough that a reader scrolling at speed never waits for it. Every section
+ * calls one of these two, so the whole page moves on one clock — change it
+ * here (and in the `reveal` block of globals.css), not at a call site.
+ *
+ * Both are plain CSS and need no client JavaScript of their own. The first
+ * screen used to sit at `opacity:0` until React and the animation library had
+ * downloaded and hydrated, so a slow phone saw an empty hero for seconds; a
+ * CSS keyframe starts on first paint instead.
+ */
+const DURATION = 0.7;
 
-  useEffect(() => {
-    animate(
-      "span",
-      {
-        opacity: 1,
-        filter: filter ? "blur(0px)" : "none",
-      },
-      {
-        duration: duration,
-        delay: stagger(0.1),
-      }
-    );
-  }, [animate, duration, filter]);
-
-  const renderWords = () => {
-    return (
-      <motion.div ref={scope}>
-        {wordsArray.map((word, idx) => {
-          return (
-            <motion.span
-              key={word + idx}
-              className="opacity-0"
-              style={{
-                filter: filter ? "blur(8px)" : "none",
-              }}
-            >
-              {word}{" "}
-            </motion.span>
-          );
-        })}
-      </motion.div>
-    );
-  };
-
-  return (
-    <div className={cn("font-bold", className)}>
-      <div className="mt-4">
-        <div className="leading-snug tracking-tight">
-          {renderWords()}
-        </div>
-      </div>
-    </div>
-  );
+function revealStyle(delay: number, duration: number) {
+  return {
+    "--reveal-delay": `${delay}s`,
+    "--reveal-dur": `${duration}s`,
+  } as React.CSSProperties;
 }
 
+/** Above the fold: plays on first paint, needs no JavaScript at all. */
 export function FadeIn({
   children,
   className,
   delay = 0,
-  duration = 0.5,
-  direction = "up",
+  duration = DURATION,
+  fade = true,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   duration?: number;
-  direction?: "up" | "down" | "left" | "right" | "none";
+  /** `false` keeps the rise but paints visible from frame one — use it on
+   *  the block that should be the page's Largest Contentful Paint. */
+  fade?: boolean;
 }) {
-  const directionOffset = {
-    up: { y: 24 },
-    down: { y: -24 },
-    left: { x: 24 },
-    right: { x: -24 },
-    none: {},
-  };
-
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        ...directionOffset[direction],
-      }}
-      animate={{
-        opacity: 1,
-        x: 0,
-        y: 0,
-      }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
-      className={className}
+    <div
+      data-fade={fade ? undefined : "false"}
+      className={cn("reveal-in", className)}
+      style={revealStyle(delay, duration)}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }
 
+/**
+ * Below the fold. Prerendered VISIBLE — nothing is hidden until
+ * <ViewportObserver /> (ui/viewport-observer.tsx) has hydrated and armed the blocks still under the fold,
+ * so a failed or slow script can never leave a section blank.
+ */
 export function FadeInOnScroll({
   children,
   className,
   delay = 0,
-  duration = 0.5,
-  direction = "up",
+  duration = DURATION,
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   duration?: number;
-  direction?: "up" | "down" | "left" | "right" | "none";
-}) {
-  const directionOffset = {
-    up: { y: 24 },
-    down: { y: -24 },
-    left: { x: 24 },
-    right: { x: -24 },
-    none: {},
-  };
-
-  return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        ...directionOffset[direction],
-      }}
-      whileInView={{
-        opacity: 1,
-        x: 0,
-        y: 0,
-      }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{
-        duration,
-        delay,
-        ease: [0.21, 0.47, 0.32, 0.98],
-      }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-export function StaggerChildren({
-  children,
-  className,
-  staggerDelay = 0.1,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  staggerDelay?: number;
 }) {
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
+    <div
+      data-reveal=""
       className={className}
+      style={revealStyle(delay, duration)}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

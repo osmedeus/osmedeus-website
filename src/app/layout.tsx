@@ -1,18 +1,29 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+  // Labels only (eyebrows, chips, captions): not worth a slot on the critical
+  // path ahead of the stylesheet. Loads with the CSS and swaps in.
+  preload: false,
+});
+
+const title = "Osmedeus - Modern Orchestration Engine for Security";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://osmedeus.org"),
-  title: "Osmedeus - Modern Orchestration Engine for Security",
-  description: "Osmedeus - Modern Orchestration Engine for Security",
+  title,
+  description: title,
   icons: {
     icon: "/favicon.ico",
   },
@@ -26,8 +37,8 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Osmedeus Team" }],
   openGraph: {
-    title: "Osmedeus - Modern Orchestration Engine for Security",
-    description: "Osmedeus - Modern Orchestration Engine for Security",
+    title,
+    description: title,
     url: "https://osmedeus.org",
     siteName: "Osmedeus",
     locale: "en_US",
@@ -37,14 +48,14 @@ export const metadata: Metadata = {
         url: "/banner.png",
         width: 1280,
         height: 640,
-        alt: "Osmedeus - Modern Orchestration Engine for Security",
+        alt: title,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Osmedeus - Modern Orchestration Engine for Security",
-    description: "Osmedeus - Modern Orchestration Engine for Security",
+    title,
+    description: title,
     images: ["/banner.png"],
   },
   robots: {
@@ -60,9 +71,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
-        <Script id="suppress-abort-errors" strategy="beforeInteractive">
-          {`(function () {
+      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
+        {/* Dev only: quiets the abort noise an IDE preview pane raises. In
+            production it would also swallow real errors that say "aborted". */}
+        {process.env.NODE_ENV === "development" && (
+          <Script id="suppress-abort-errors" strategy="beforeInteractive">
+            {`(function () {
   function shouldSuppress(v) {
     var s = "";
     try {
@@ -144,7 +158,8 @@ export default function RootLayout({
     );
   } catch (e) {}
 })();`}
-        </Script>
+          </Script>
+        )}
         <ThemeProvider
           attribute="data-theme"
           defaultTheme="dark"
