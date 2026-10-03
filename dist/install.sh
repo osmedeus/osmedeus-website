@@ -2,14 +2,26 @@
 set -euo pipefail
 
 # Osmedeus CLI Installation Script
-# Downloads pre-compiled Osmedeus CLI binary from GitHub releases
+# Installs the pre-compiled Osmedeus CLI binary: from the per-platform
+# @j3ssie/osmedeus package on the npm registry's CDN first (no node or npm
+# needed), and from GitHub releases if that fails.
+#
+# The one installer. nightly-install.sh and full-install.sh are thin wrappers
+# that pipe this file through bash with some of these set:
+#   OSM_VERSION=v1.2.3       install that release instead of the latest
+#   OSM_SOURCE=github        skip npm and install from GitHub releases
+#   OSM_HEALTH_CHECK=1       run `osmedeus health` once installed
+#   OSM_URL=https://...      fetch metadata.json and tarballs from a mirror
+#   OSM_NPM_REGISTRY=https://...  use an npm registry mirror
 
 # Configuration
 OSM_HOME="${OSM_HOME:-$HOME/.osmedeus}"
 BIN_DIR="$HOME/.local/bin"
 GITHUB_REPO="j3ssie/osmedeus"
-GITHUB_RELEASES="https://github.com/${GITHUB_REPO}/releases"
 FALLBACK_VERSION="v5.0.0-beta"
+NPM_REGISTRY="${OSM_NPM_REGISTRY:-https://registry.npmjs.org}"
+NPM_PKG="@j3ssie/osmedeus"
+NPM_PKG_ENC="@j3ssie%2fosmedeus"  # URL-encoded scoped name
 
 # Retry configuration
 MAX_RETRIES=6
@@ -67,20 +79,40 @@ need_cmd() {
 	fi
 }
 
+# Check optional workflow dependencies and warn if missing
+check_workflow_deps() {
+	local missing=()
+	for cmd in jq make gcc git; do
+		if ! command_exists "$cmd"; then
+			missing+=("$cmd")
+		fi
+	done
+
+	if [[ ${#missing[@]} -gt 0 ]]; then
+		warn "Heads up: ${LIGHT_GREEN}${missing[*]}${NC} not found — some workflow installations might be broken without it."
+		warn "Install them with: ${LIGHT_GREEN}sudo apt-get update && sudo apt-get install -y jq build-essential git${NC}"
+	fi
+}
+
 # Check all prerequisite commands upfront
 check_prereqs() {
-	for cmd in uname mktemp chmod mkdir rm mv tar grep awk cut head sed basename touch; do
+	for cmd in uname mktemp chmod mkdir rm mv tar grep awk cut head sed basename touch gzip; do
 		need_cmd "$cmd"
 	done
 
 	# Check for sha256 checksum command (shasum on macOS/BSD, sha256sum on Linux)
 	if command_exists shasum; then
 		SHA256_CMD="shasum -a 256"
+		SHA1_CMD="shasum -a 1"
 	elif command_exists sha256sum; then
 		SHA256_CMD="sha256sum"
+		SHA1_CMD="sha1sum"
 	else
 		error "need 'shasum' or 'sha256sum' (command not found)"
 	fi
+
+	# Optional: parses the registry's JSON exactly; grep/sed does without it.
+	JQ="$(command -v jq || true)"
 }
 
 # Detect target platform for CLI binary
@@ -117,10 +149,13 @@ detect_platform() {
 	echo "$target"
 }
 
-# Robust downloader that handles snap curl issues with retry logic
+# Robust downloader that handles snap curl issues with retry logic.
+#   $1 = url, $2 = output file, $3 = 1 to draw a progress bar on stderr
+# Returns non-zero once retries run out, so a caller can fall back.
 downloader() {
 	local url="$1"
 	local output_file="$2"
+	local progress="${3:-0}"
 	local attempt=1
 	local delay=$INITIAL_RETRY_DELAY
 
@@ -142,12 +177,26 @@ downloader() {
 
 		# Check if we have a working (non-snap) curl
 		if command_exists curl && [[ $snap_curl -eq 0 ]]; then
-			if curl -fsSL "$url" -o "$output_file" 2>/dev/null; then
+			if [[ $progress -eq 1 ]]; then
+				if curl -#fL "$url" -o "$output_file"; then
+					download_success=1
+				fi
+			elif curl -fsSL "$url" -o "$output_file" 2>/dev/null; then
 				download_success=1
 			fi
 		# Try wget for both no curl and the broken snap curl
 		elif command_exists wget; then
-			if wget -q --show-progress "$url" -O "$output_file" 2>/dev/null; then
+			if [[ $progress -eq 0 ]]; then
+				if wget -q "$url" -O "$output_file" 2>/dev/null; then
+					download_success=1
+				fi
+			elif [[ "$(wget --help 2>&1)" == *--show-progress* ]]; then
+				if wget -q --show-progress "$url" -O "$output_file"; then
+					download_success=1
+				fi
+			# BusyBox wget (Alpine) has no --show-progress, but draws its own
+			# bar when it isn't quiet.
+			elif wget "$url" -O "$output_file"; then
 				download_success=1
 			fi
 		# If we can't fall back from broken snap curl to wget, report the broken snap curl
@@ -170,29 +219,29 @@ downloader() {
 			delay=$((delay * 2))
 			attempt=$((attempt + 1))
 		else
-			error "Download failed after $MAX_RETRIES attempts. URL: $url"
+			warn "Download failed after $MAX_RETRIES attempts. URL: $url"
+			return 1
 		fi
 	done
 }
 
-# Download file with progress
+# Download a release tarball, with a progress bar. Non-zero on failure.
 download_file() {
 	local url="$1"
 	local output_file="$2"
 	local version="${3:-}"
 
-	if [[ -n "$version" ]]; then
-		log "Downloading $(basename "$output_file") (${LIGHT_GREEN}${version}${NC})..."
-	else
-		log "Downloading $(basename "$output_file")..."
-	fi
+	log "Downloading $(basename "$url") (${LIGHT_GREEN}${version}${NC})..."
 
 	# Use secure temporary file
 	local temp_file
-	temp_file=$(mktemp "$(dirname "$output_file")/tmp.XXXXXX")
+	temp_file=$(mktemp "$(dirname "$output_file")/tmp.XXXXXX") || return 1
 
 	# Download to temp file first, then atomic move
-	downloader "$url" "$temp_file"
+	if ! downloader "$url" "$temp_file" 1; then
+		rm -f "$temp_file"
+		return 1
+	fi
 	mv "$temp_file" "$output_file"
 }
 
@@ -213,31 +262,80 @@ verify_checksum() {
 	success "Checksum verified"
 }
 
-# Fetch latest CLI version from GitHub API with fallback
+# Extract one string field from a small registry JSON document.
+#   $1 = json file, $2 = jq filter, $3 = key name for the grep/sed fallback
+json_field() {
+	local file="$1" filter="$2" key="$3"
+	if [[ -n "$JQ" ]]; then
+		"$JQ" -r "${filter} // empty" "$file" 2>/dev/null || true
+	else
+		grep -o "\"${key}\"[[:space:]]*:[[:space:]]*\"[^\"]*\"" "$file" \
+			| head -1 \
+			| sed 's/.*:[[:space:]]*"\([^"]*\)"/\1/' || true
+	fi
+}
+
+# Map the detected platform to the npm package's platform tag.
+npm_platform_tag() {
+	case "$1" in
+		darwin_amd64) echo "darwin-x64" ;;
+		darwin_arm64) echo "darwin-arm64" ;;
+		linux_amd64) echo "linux-x64" ;;
+		linux_arm64) echo "linux-arm64" ;;
+		*) return 1 ;;
+	esac
+}
+
+# Check an npm tarball against the registry's digest: the SHA-512 `integrity`
+# when openssl is available, else the SHA-1 `shasum`. Non-zero on mismatch.
+verify_npm_tarball() {
+	local file="$1" integrity="$2" sha1="$3" expected actual
+
+	log "Verifying checksum..."
+
+	if [[ "$integrity" == sha512-* ]] && command_exists openssl; then
+		expected="$integrity"
+		actual="sha512-$(openssl dgst -sha512 -binary "$file" | openssl base64 -A)"
+	elif [[ -n "$sha1" ]]; then
+		expected="$sha1"
+		actual=$($SHA1_CMD "$file" | cut -d' ' -f1)
+	else
+		warn "The registry gave no checksum for this tarball"
+		return 1
+	fi
+
+	if [[ "$actual" != "$expected" ]]; then
+		warn "Checksum verification failed!\nExpected: $expected\nActual: $actual"
+		return 1
+	fi
+
+	success "Checksum verified"
+}
+
+# Fetch latest CLI version from GitHub API with fallback.
+#
+# One quick try rather than `downloader`: its retry loop spent a minute in
+# backoff on a rate-limited (403) or offline API and then exited from inside
+# this $(…), killing the install before the fallback below was ever reached.
 fetch_latest_version() {
-    local api_url="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
-    local version
-    local tmp_file
+	local api_url="https://api.github.com/repos/${GITHUB_REPO}/releases/latest"
+	local fetch=(curl -fsSL --max-time 15)
+	if ! command_exists curl; then
+		fetch=(wget -qO- --timeout=15)
+	fi
 
-    log "Fetching latest version from GitHub..."
-    tmp_file=$(mktemp)
+	log "Fetching latest version from GitHub..."
 
-    # Try to fetch from GitHub API
-    if downloader "$api_url" "$tmp_file" 2>/dev/null; then
-        version=$(grep '"tag_name":' "$tmp_file" | head -n 1 | sed -E 's/.*"([^"]+)".*/\1/')
-        rm -f "$tmp_file"
+	local version
+	version=$("${fetch[@]}" "$api_url" 2>/dev/null | grep '"tag_name":' | head -n 1 | sed -E 's/.*"([^"]+)".*/\1/') || true
 
-        if [[ -n "$version" ]]; then
-            echo "$version"
-            return
-        fi
-    fi
+	if [[ -n "$version" ]]; then
+		echo "$version"
+		return
+	fi
 
-    rm -f "$tmp_file" 2>/dev/null
-
-    # Fall back to hardcoded version
-    warn "Failed to fetch from GitHub API, using fallback: $FALLBACK_VERSION"
-    echo "$FALLBACK_VERSION"
+	warn "Failed to fetch from GitHub API, using fallback: $FALLBACK_VERSION"
+	echo "$FALLBACK_VERSION"
 }
 
 fetch_latest_version_from_metadata() {
@@ -247,7 +345,7 @@ fetch_latest_version_from_metadata() {
 
 	log "Fetching latest version from ${metadata_url}..."
 	tmp_file=$(mktemp)
-	downloader "$metadata_url" "$tmp_file"
+	downloader "$metadata_url" "$tmp_file" || error "Failed to download ${metadata_url}"
 	version=$(grep -E '"version"\s*:' "$tmp_file" | head -n 1 | sed -E 's/.*"version"\s*:\s*"([^\"]+)".*/\1/')
 	rm -f "$tmp_file"
 
@@ -272,11 +370,11 @@ check_existing_installation() {
 	fi
 
 	if [[ -n "$existing_binary" ]]; then
-		local old_version=""
-		local old_build=""
-		# Try to get the current version
-		old_version=$("$existing_binary" version 2>/dev/null | grep 'Version:' || echo "")
-		old_build=$("$existing_binary" version 2>/dev/null | grep 'Build:' || echo "")
+		# Try to get the current version (one run of the old binary, not two)
+		local version_info old_version old_build
+		version_info=$("$existing_binary" version 2>/dev/null || true)
+		old_version=$(grep 'Version:' <<<"$version_info" || true)
+		old_build=$(grep 'Build:' <<<"$version_info" || true)
 
 		if [[ -n "$old_version" && -n "$old_build" ]]; then
 			warn "Detected existing osmedeus installation at $existing_binary (${old_version} - ${old_build})"
@@ -287,16 +385,87 @@ check_existing_installation() {
 	fi
 }
 
-# Install Osmedeus CLI binary
+# Install Osmedeus CLI binary: npm first, GitHub releases if that fails. A
+# mirror ($OSM_URL) or OSM_SOURCE=github goes straight to the GitHub path.
 install_osmedeus_binary() {
 	local platform="$1"
-	local binary_name="osmedeus"
+	local version="${OSM_VERSION:-}"
 
 	# Check for existing installation before proceeding
 	check_existing_installation
 
-	local version
-	version="${OSM_VERSION:-}"
+	mkdir -p "$OSM_HOME" "$BIN_DIR"
+
+	if [[ $OSM_URL_ENV_SET -eq 1 && -n "${OSM_URL}" ]] || [[ "${OSM_SOURCE:-npm}" == "github" ]]; then
+		install_from_github "$platform" "$version"
+	elif ! install_from_npm "$platform" "$version"; then
+		rm -rf "$OSM_HOME"/osm-install-*
+		warn "Installing from npm failed; falling back to GitHub releases"
+		install_from_github "$platform" "$version"
+	fi
+
+	success "Osmedeus CLI binary installed to $BIN_DIR/osmedeus"
+}
+
+# Primary source: the per-platform @j3ssie/osmedeus package, served from the
+# npm registry's CDN. It runs as an `if` condition, where `set -e` does not
+# apply, so every step returns explicitly and the caller can fall back.
+install_from_npm() {
+	local platform="$1"
+	local version="${2#v}"
+	local tag
+	tag=$(npm_platform_tag "$platform") || return 1
+
+	local manifest="$OSM_HOME/osm-install-manifest.json"
+	local tarball_path="$OSM_HOME/osm-install-tarball.tgz"
+	local extract_dir="$OSM_HOME/osm-install-extract"
+
+	# Fewer retries than the default: a dead registry should hand over to
+	# GitHub in seconds, not after a minute of backoff.
+	if [[ -z "$version" ]]; then
+		log "Resolving ${NPM_PKG}@latest from npm..."
+		MAX_RETRIES=3 downloader "${NPM_REGISTRY}/${NPM_PKG_ENC}/latest?t=$(date +%s)" "$manifest" || return 1
+		version=$(json_field "$manifest" '.version' 'version')
+		[[ -n "$version" ]] || return 1
+	fi
+
+	MAX_RETRIES=3 downloader "${NPM_REGISTRY}/${NPM_PKG_ENC}/${version}-${tag}?t=$(date +%s)" "$manifest" || return 1
+	local tarball_url integrity sha1
+	tarball_url=$(json_field "$manifest" '.dist.tarball' 'tarball')
+	integrity=$(json_field "$manifest" '.dist.integrity' 'integrity')
+	sha1=$(json_field "$manifest" '.dist.shasum' 'shasum')
+	[[ -n "$tarball_url" ]] || return 1
+
+	log "Installing version: ${LIGHT_GREEN}v${version}${NC} (npm: ${tag})"
+
+	rm -rf "$extract_dir" && mkdir -p "$extract_dir" || return 1
+	MAX_RETRIES=3 download_file "$tarball_url" "$tarball_path" "v${version}" || return 1
+	verify_npm_tarball "$tarball_path" "$integrity" "$sha1" || return 1
+
+	log "Extracting tarball..."
+	tar -xzf "$tarball_path" -C "$extract_dir" || return 1
+
+	# The package ships the binary gzipped at package/vendor/<tag>/osmedeus.gz
+	local gz_path="$extract_dir/package/vendor/$tag/osmedeus.gz"
+	if [[ ! -f "$gz_path" ]]; then
+		warn "No vendor/$tag/osmedeus.gz in the npm tarball"
+		return 1
+	fi
+	gzip -dc "$gz_path" > "$extract_dir/osmedeus" || return 1
+	chmod +x "$extract_dir/osmedeus" || return 1
+	mv "$extract_dir/osmedeus" "$BIN_DIR/osmedeus" || return 1
+
+	rm -f "$manifest" "$tarball_path"
+	rm -rf "$extract_dir"
+}
+
+# Fallback source, and the only one for a mirror or a nightly: GitHub releases
+# (or $OSM_URL), verified against the release's checksums.txt.
+install_from_github() {
+	local platform="$1"
+	local version="$2"
+	local binary_name="osmedeus"
+
 	if [[ -z "$version" ]]; then
 		if [[ $OSM_URL_ENV_SET -eq 1 && -n "${OSM_URL}" ]]; then
 			version=$(fetch_latest_version_from_metadata)
@@ -317,7 +486,6 @@ install_osmedeus_binary() {
 		base_url="${OSM_URL%/}"
 	else
 		base_url="https://github.com/${GITHUB_REPO}/releases/download/${version}"
-		OSM_URL="$base_url"
 	fi
 	local tarball_url="${base_url}/${tarball_name}"
 	local checksum_url="${base_url}/checksums.txt"
@@ -326,13 +494,10 @@ install_osmedeus_binary() {
 	local checksum_path="$OSM_HOME/osm-install-checksums.txt"
 	local extract_dir="$OSM_HOME/osm-install-extract"
 
-	# Ensure directories exist
-	mkdir -p "$OSM_HOME"
-	mkdir -p "$BIN_DIR"
 	mkdir -p "$extract_dir"
 
 	# Download checksum first
-	download_file "$checksum_url" "$checksum_path" "$version"
+	downloader "$checksum_url" "$checksum_path" || error "Failed to download ${checksum_url}"
 
 	# Extract expected checksum for our tarball
 	local expected_checksum
@@ -343,7 +508,7 @@ install_osmedeus_binary() {
 	fi
 
 	# Download tarball
-	download_file "$tarball_url" "$tarball_path" "$version"
+	download_file "$tarball_url" "$tarball_path" "$version" || error "Failed to download ${tarball_url}"
 
 	# Verify checksum
 	verify_checksum "$tarball_path" "$expected_checksum"
@@ -362,8 +527,6 @@ install_osmedeus_binary() {
 	# Clean up
 	rm -f "$tarball_path" "$checksum_path"
 	rm -rf "$extract_dir"
-
-	success "Osmedeus CLI binary installed to $binary_path"
 }
 
 # Update PATH in shell profile
@@ -443,6 +606,7 @@ main() {
 
 	# Check prerequisites
 	check_prereqs
+	check_workflow_deps
 
 	# Detect platform
 	local platform
@@ -460,6 +624,12 @@ main() {
 	log "Run ${LIGHT_GREEN}osmedeus health${NC} (after restarting your shell) to validate your setup and generate a sample config"
 	log "Visit ${LIGHT_GREEN}https://docs.osmedeus.org${NC} for documentation"
 	log "Run ${LIGHT_GREEN}osmedeus install base --preset${NC} to download the ready-to-use workflow and then start scanning"
+
+	# By path: on a fresh install $BIN_DIR is not on this shell's PATH yet.
+	if [[ "${OSM_HEALTH_CHECK:-0}" == 1 ]]; then
+		echo ""
+		"$BIN_DIR/osmedeus" health
+	fi
 }
 
 main "$@"

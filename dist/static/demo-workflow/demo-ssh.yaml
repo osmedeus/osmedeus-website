@@ -1,3 +1,4 @@
+# workflow.yaml - Osmedeus Workflow Example
 kind: module
 name: demo-ssh
 description: Demo SSH runner with remote-bash
